@@ -47,7 +47,7 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search..."
-            className="text-sm
+            className="text-sm p-[2px]
             placeholder:text-sm
             focus:text-sm focus:text-gray-600 focus:border-gray-600
             appearance-none border-0 border-b-2 
