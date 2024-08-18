@@ -18,7 +18,7 @@ const Stories = () => {
             rounded-full ring-2 ring-gray-600"
             />
           </div>
-          <span className="font-medium">Ricky</span>
+          <span className="font-semibold text-gray-600">Ricky</span>
         </div>
         <div className="flex flex-col items-center gap-2 ">
           <div
@@ -33,7 +33,7 @@ const Stories = () => {
             rounded-full ring-2 ring-gray-600"
             />
           </div>
-          <span className="font-medium">Ricky</span>
+          <span className="font-semibold text-gray-600">Ricky</span>
         </div>
         <div className="flex flex-col items-center gap-2 ">
           <div
@@ -48,7 +48,7 @@ const Stories = () => {
             rounded-full ring-2 ring-gray-600"
             />
           </div>
-          <span className="font-medium">Ricky</span>
+          <span className="font-semibold text-gray-600">Ricky</span>
         </div>
         <div className="flex flex-col items-center gap-2 ">
           <div
@@ -63,7 +63,7 @@ const Stories = () => {
             rounded-full ring-2 ring-gray-600"
             />
           </div>
-          <span className="font-medium">Ricky</span>
+          <span className="font-semibold text-gray-600">Ricky</span>
         </div>
         <div className="flex flex-col items-center gap-2 ">
           <div
@@ -78,7 +78,7 @@ const Stories = () => {
             rounded-full ring-2 ring-gray-600"
             />
           </div>
-          <span className="font-medium">Ricky</span>
+          <span className="font-semibold text-gray-600">Ricky</span>
         </div>
       </div>
     </div>
