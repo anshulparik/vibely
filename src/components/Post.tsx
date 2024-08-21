@@ -13,12 +13,12 @@ const Post = () => {
         <div className="flex items-center gap-4">
           <div
             className="flex items-center gap-4 
-            h-10 w-10 relative"
+            h-10 w-10 relative ring-1 rounded-full ring-gray-600"
           >
             <Image
-              src="/profile.png"
+              src="/profile_img.png"
               alt=""
-              className="rounded-full absolute"
+              className="rounded-full absolute object-cover"
               fill
             />
           </div>

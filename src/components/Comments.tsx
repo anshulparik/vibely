@@ -9,7 +9,7 @@ const Comments = () => {
   return (
     <div className="w-full">
       <div className="flex items-center gap-4 mb-6">
-        <div className="relative w-8 h-8">
+        <div className="relative w-8 h-8 ring-1 rounded-full ring-gray-600">
           <Image
             src="/profile.png"
             alt=""
@@ -36,7 +36,7 @@ const Comments = () => {
       <div className="border-2 rounded-md p-4">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <div className="relative w-8 h-8">
+            <div className="relative w-8 h-8 ring-1 rounded-full ring-gray-600">
               <Image
                 src="/post.jpg"
                 alt=""

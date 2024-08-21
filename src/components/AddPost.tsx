@@ -28,19 +28,19 @@ const AddPost = () => {
       <div className="flex items-center justify-evenly flex-wrap">
         <div className="flex items-center gap-2 cursor-pointer">
           <FaImage className="text-sky-500 text-sm md:text-xl" />
-          <span className="text-gray-400 text-xs">Photo</span>
+          <span className="text-gray-400 text-xs font-semibold">Photo</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <FaVideo className="text-sky-500 text-sm md:text-xl" />
-          <span className="text-gray-400 text-xs">Video</span>
+          <span className="text-gray-400 text-xs font-semibold">Video</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <RiChatPollFill className="text-sky-500 text-sm md:text-xl" />
-          <span className="text-gray-400 text-xs">Poll</span>
+          <span className="text-gray-400 text-xs font-semibold">Poll</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer">
           <MdEvent className="text-sky-500 text-sm md:text-xl" />
-          <span className="text-gray-400 text-xs">Event</span>
+          <span className="text-gray-400 text-xs font-semibold">Event</span>
         </div>
       </div>
     </div>

@@ -1,8 +1,15 @@
 import React from 'react'
+import FriendRequest from './FriendRequest'
+import Birthdays from './Birthdays'
+import Ad from './Ad'
 
-const RightSidebar = () => {
+const RightSidebar = ({ userId }: { userId?: string }) => {
   return (
-    <div>RightSidebar</div>
+    <aside className='flex flex-col gap-6'>
+      <FriendRequest />
+      <Birthdays />
+      <Ad size='md' />
+    </aside>
   )
 }
 
