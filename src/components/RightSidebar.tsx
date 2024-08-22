@@ -1,16 +1,24 @@
-import React from 'react'
-import FriendRequest from './FriendRequest'
-import Birthdays from './Birthdays'
-import Ad from './Ad'
+import React, { use } from "react";
+import Birthdays from "./Birthdays";
+import Ad from "./Ad";
+import FriendRequest from "./FriendRequest";
+import UserInfoCard from "./UserInfoCard";
+import UserMediaCard from "./UserMediaCard";
 
 const RightSidebar = ({ userId }: { userId?: string }) => {
   return (
-    <aside className='flex flex-col gap-6'>
+    <aside className="flex flex-col gap-6">
+      {userId ? (
+        <>
+          <UserInfoCard userId={userId} />
+          <UserMediaCard userId={userId} />
+        </>
+      ) : null}
       <FriendRequest />
       <Birthdays />
-      <Ad size='md' />
+      <Ad size="md" />
     </aside>
-  )
-}
+  );
+};
 
-export default RightSidebar
+export default RightSidebar;

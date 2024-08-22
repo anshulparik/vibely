@@ -9,12 +9,12 @@ const Comments = () => {
   return (
     <div className="w-full">
       <div className="flex items-center gap-4 mb-6">
-        <div className="relative w-8 h-8 ring-1 rounded-full ring-gray-600">
+        <div className="relative w-8 h-8">
           <Image
             src="/profile.png"
             alt=""
             fill
-            className="rounded-full absolute object-cover"
+            className="ring-1 rounded-full ring-gray-600 absolute object-cover"
           />
         </div>
         <div className="flex flex-1 gap-2">
@@ -36,12 +36,12 @@ const Comments = () => {
       <div className="border-2 rounded-md p-4">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <div className="relative w-8 h-8 ring-1 rounded-full ring-gray-600">
+            <div className="relative w-8 h-8">
               <Image
                 src="/post.jpg"
                 alt=""
                 fill
-                className="rounded-full absolute object-cover"
+                className="ring-1 rounded-full ring-gray-600 absolute object-cover"
               />
             </div>
             <span className="text-xs md:text-sm font-bold text-gray-600">

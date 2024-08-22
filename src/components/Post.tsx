@@ -11,14 +11,11 @@ const Post = () => {
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-4">
-          <div
-            className="flex items-center gap-4 
-            h-10 w-10 relative ring-1 rounded-full ring-gray-600"
-          >
+          <div className="h-10 w-10 relative">
             <Image
               src="/profile_img.png"
               alt=""
-              className="rounded-full absolute object-cover"
+              className="ring-1 rounded-full ring-gray-600 absolute object-cover"
               fill
             />
           </div>
