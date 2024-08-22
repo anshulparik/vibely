@@ -8,7 +8,7 @@ import UserMediaCard from "./UserMediaCard";
 const RightSidebar = ({ userId }: { userId?: string }) => {
   return (
     <aside className="flex flex-col gap-6">
-      {userId ? (
+      {23 ? (
         <>
           <UserInfoCard userId={userId} />
           <UserMediaCard userId={userId} />
