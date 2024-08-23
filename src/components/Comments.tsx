@@ -11,7 +11,7 @@ const Comments = () => {
       <div className="flex items-center gap-4 mb-6">
         <div className="relative w-8 h-8">
           <Image
-            src="/profile.png"
+            src="/profile_img.png"
             alt=""
             fill
             className="ring-1 rounded-full ring-gray-600 absolute object-cover"

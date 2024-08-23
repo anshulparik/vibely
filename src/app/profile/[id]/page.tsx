@@ -7,7 +7,7 @@ const ProfilePage = () => {
   return (
     <div className="flex gap-6 p-3 md:p-6">
       <div className="hidden xl:block w-[20%]">
-        <LeftSidebar />
+        <LeftSidebar type='profile' />
       </div>
       <div className="w-full lg:w-[70%] xl:w-[50%]">
         <div className="flex flex-col gap-6">

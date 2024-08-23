@@ -18,7 +18,7 @@ const Ad = ({ size }: { size: "sm" | "md" | "lg" }) => {
         <SlOptions className="text-xl text-gray-400 cursor-pointer" />
       </div>
       <div
-        className={`flex flex-col mt-4 ${size === "sm" ? "gap-2" : "gap-4"}`}
+        className={`flex flex-col mt-4 gap-4`}
       >
         <div
           className={`w-full relative ${

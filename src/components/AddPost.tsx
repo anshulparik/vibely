@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import { BsEmojiSmile } from "react-icons/bs";
 import { RiChatPollFill } from "react-icons/ri";
 import { MdEvent } from "react-icons/md";
