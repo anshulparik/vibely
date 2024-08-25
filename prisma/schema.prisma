@@ -1,0 +1,124 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id
+  username    String   @unique
+  profilePic  String?
+  coverPic    String?
+  firstName   String?
+  lastName    String?
+  description String?
+  location    String?
+  school      String?
+  work        String?
+  website     String?
+  createdAt   DateTime @default(now())
+
+  // relations
+  posts      Post[] // no key
+  likes      Like[]
+  comments   Comment[]
+
+  followers  Follower[] @relation("UserFollowers")
+  followings Follower[] @relation("UserFollowings")
+
+  senders  FollowRequest[] @relation("FollowRequestsSent")
+  receivers FollowRequest[] @relation("FollowRequestsReceived")
+
+  Block Block[] @relation("Block")
+  Blocked Block[] @relation("Blocked")
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  // postPic String?
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade) // no key
+  userId String // key
+
+  likes    Like[]
+  comments Comment[]
+}
+
+model Like {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  // relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId Int
+}
+
+model Comment {
+  id          Int      @id @default(autoincrement())
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId Int
+
+  likes Like[]
+}
+
+model Follower {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  // relations
+  follower   User   @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId String
+
+  following   User   @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId String
+}
+
+model FollowRequest {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  // relations
+  sender   User   @relation("FollowRequestsSent", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId String
+
+  receiver   User   @relation("FollowRequestsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId String
+
+  @@unique([senderId, receiverId])
+}
+
+model Block {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  // relations
+  block   User   @relation("Block", fields: [blockId], references: [id], onDelete: Cascade)
+  blockId String
+
+  blocked   User   @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  blockedId String
+
+  @@unique([blockId, blockedId])
+}
+
