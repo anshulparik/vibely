@@ -10,8 +10,8 @@ datasource db {
 model User {
   id          String   @id
   username    String   @unique
-  profilePic  String?
-  coverPic    String?
+  avatarURL   String
+  coverURL    String?
   firstName   String?
   lastName    String?
   description String?
@@ -25,20 +25,21 @@ model User {
   posts      Post[] // no key
   likes      Like[]
   comments   Comment[]
+  story      Story?
 
   followers  Follower[] @relation("UserFollowers")
   followings Follower[] @relation("UserFollowings")
 
-  senders  FollowRequest[] @relation("FollowRequestsSent")
-  receivers FollowRequest[] @relation("FollowRequestsReceived")
+  senders    FollowRequest[] @relation("FollowRequestsSent")
+  receivers  FollowRequest[] @relation("FollowRequestsReceived")
 
-  Block Block[] @relation("Block")
-  Blocked Block[] @relation("Blocked")
+  Block      Block[] @relation("Block")
+  Blocked    Block[] @relation("Blocked")
 }
 
 model Post {
   id          Int      @id @default(autoincrement())
-  // postPic String?
+  postURL     String?
   description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -122,3 +123,15 @@ model Block {
   @@unique([blockId, blockedId])
 }
 
+model Story {
+  id        Int      @id @default(autoincrement())
+  storyURL  String
+  createdAt DateTime @default(now())
+  expiresAt DateTime 
+
+  // relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
+}
+
+// npx prisma db push
