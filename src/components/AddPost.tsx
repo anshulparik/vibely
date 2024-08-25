@@ -4,14 +4,22 @@ import { RiChatPollFill } from "react-icons/ri";
 import { MdEvent } from "react-icons/md";
 import { FaVideo } from "react-icons/fa";
 import { FaImage } from "react-icons/fa";
+import prisma from "@/lib/client";
+import { auth } from "@clerk/nextjs/server";
 
 const AddPost = () => {
+  const { userId } = auth();
+  console.log(userId, "=======");
+
+  if (!userId) return;
+
+
   return (
     <div
       className="p-4 bg-white rounded-lg shadow-md
         flex flex-col gap-4 text-sm"
     >
-      <div className="flex gap-2">
+      <form action="" className="flex gap-2">
         <input
           className="flex-1 text-sm p-1
             placeholder:text-sm
@@ -19,10 +27,11 @@ const AddPost = () => {
             appearance-none border-0 border-b-2 
             outline-none"
           placeholder="What's on your mind?"
-          id=""
+          name="description"
         />
         <BsEmojiSmile className="text-xl text-sky-500 cursor-pointer self-end" />
-      </div>
+        <button>Send</button>
+      </form>
 
       <div className="flex items-center justify-evenly flex-wrap">
         <div className="flex items-center gap-2 cursor-pointer">
