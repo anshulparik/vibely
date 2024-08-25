@@ -9,8 +9,6 @@ import { auth } from "@clerk/nextjs/server";
 
 const AddPost = () => {
   const { userId } = auth();
-  console.log(userId, "=======");
-
   if (!userId) return;
 
 

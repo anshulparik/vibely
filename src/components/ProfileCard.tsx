@@ -1,7 +1,28 @@
 import React from "react";
 import Image from "next/image";
+import prisma from "@/lib/client";
+import { auth } from "@clerk/nextjs/server";
 
-const ProfileCard = () => {
+const ProfileCard = async () => {
+  const { userId } = auth();
+  if (!userId) return;
+
+  const user = await prisma?.user?.findFirst({
+    where: {
+      id: userId,
+    },
+    include: {
+      _count: {
+        select: {
+          followers: true,
+        },
+      },
+    },
+  });
+
+  console.log(user, "Anshul");
+  if (!user) return null;
+
   return (
     <div
       className="p-4 bg-white rounded-lg shadow-md
@@ -10,7 +31,7 @@ const ProfileCard = () => {
       <div className="relative">
         <div className="relative w-full h-20">
           <Image
-            src="/post.jpg"
+            src={user?.coverURL || "/noAvatar.jpg"}
             alt=""
             className="absolute object-cover rounded-md"
             fill
@@ -22,7 +43,7 @@ const ProfileCard = () => {
         >
           <div className="relative w-12 h-12">
             <Image
-              src="/profile_img.png"
+              src={user?.avatarURL || "/noCover.jpg"}
               alt=""
               className="absolute object-cover rounded-full ring-1 ring-gray-600"
               fill
@@ -31,23 +52,31 @@ const ProfileCard = () => {
         </div>
       </div>
       <div className="mt-2 flex flex-col items-center">
-        <span className="font-bold text-sky-500 mb-2">Anshul Parik</span>
+        <span className="font-bold text-sky-500 mb-2">
+          {user?.firstName && user?.lastName
+            ? `${user?.firstName} ${user?.lastName}`
+            : user?.username}
+        </span>
         <div className="mb-4 flex items-center gap-3">
           <div className="flex">
-            {Array(3)?.fill("_")?.map((_) => {
-              return (
-                <div className="h-3 w-3 relative">
-                  <Image
-                    src="/profile_img.png"
-                    alt=""
-                    className="ring-1 rounded-full ring-gray-600 absolute object-cover"
-                    fill
-                  />
-                </div>
-              );
-            })}
+            {Array(3)
+              ?.fill("_")
+              ?.map((_) => {
+                return (
+                  <div className="h-3 w-3 relative">
+                    <Image
+                      src="/profile_img.png"
+                      alt=""
+                      className="ring-1 rounded-full ring-gray-600 absolute object-cover"
+                      fill
+                    />
+                  </div>
+                );
+              })}
           </div>
-          <span className="text-xs text-gray-600 font-medium">512 Followers</span>
+          <span className="text-xs text-gray-600 font-medium">
+            {`${user?._count?.followers} Followers`}
+          </span>
         </div>
         <button
           className="text-xs text-white font-semibold bg-sky-500 

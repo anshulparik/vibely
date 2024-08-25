@@ -62,8 +62,8 @@ export async function POST(req: Request) {
         data: {
           id: evt.data.id,
           username: JSON.parse(body).data.username,
-          avatarURL: JSON.parse(body).data.image_url || "/no_image.jpg",
-          coverURL: "/no_image.jpg",
+          avatarURL: JSON.parse(body).data.image_url || "/noAvatar.jpg",
+          coverURL: "/noCover.jpg",
         },
       });
       return new Response("User has been created!", { status: 200 });
@@ -81,7 +81,7 @@ export async function POST(req: Request) {
         },
         data: {
           username: JSON.parse(body).data.username,
-          avatarURL: JSON.parse(body).data.image_url || "/no_image.jpg",
+          avatarURL: JSON.parse(body).data.image_url || "/noAvatar.jpg",
         },
       });
       return new Response("User has been updated!", { status: 200 });
