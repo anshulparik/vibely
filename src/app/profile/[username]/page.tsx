@@ -1,10 +1,51 @@
-import Feed from "@/components/Feed";
-import LeftSidebar from "@/components/LeftSidebar";
-import RightSidebar from "@/components/RightSidebar";
+import Feed from "@/components/Feed/Feed";
+import LeftSidebar from "@/components/LeftSidebar/LeftSidebar";
+import RightSidebar from "@/components/RightSidebar/RightSidebar";
 import React from "react";
 import Image from "next/image";
+import prisma from "@/lib/client";
+import { notFound } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 
-const ProfilePage = () => {
+const ProfilePage = async ({ params }: { params: { username: string } }) => {
+  const username = params?.username;
+  if (!username) return;
+
+  const user = await prisma?.user?.findFirst({
+    where: {
+      username,
+    },
+    include: {
+      _count: {
+        select: {
+          followers: true,
+          followings: true,
+          posts: true,
+        },
+      },
+    },
+  });
+
+  if (!user) return notFound();
+
+  const { userId: currentUserId } = auth();
+  let isBlocked;
+
+  if (currentUserId) {
+    const res = await prisma?.block?.findFirst({
+      where: {
+        blockId: user.id,
+        blockedId: currentUserId,
+      },
+    });
+
+    if (res) isBlocked = true;
+  } else {
+    isBlocked = false;
+  }
+
+  if (isBlocked) return notFound();
+
   return (
     <div className="flex gap-6 p-3 md:p-6">
       <div className="hidden xl:block w-[20%]">
@@ -16,7 +57,7 @@ const ProfilePage = () => {
             <div className="relative">
               <div className="relative w-full h-64">
                 <Image
-                  src="/ads.jpg"
+                  src={user?.coverURL || "/noCover.jpg"}
                   alt=""
                   className="absolute object-cover rounded-md"
                   fill
@@ -28,7 +69,7 @@ const ProfilePage = () => {
               >
                 <div className="relative w-32 h-32">
                   <Image
-                    src="/profile_img.png"
+                    src={user?.avatarURL || "/noAvatar.jpg"}
                     alt=""
                     className="absolute object-cover rounded-full 
                     ring-4 ring-gray-700"
@@ -39,23 +80,31 @@ const ProfilePage = () => {
             </div>
             <div className="mt-20">
               <h1 className="text-gray-700 text-2xl font-semibold mb-4 text-center">
-                Anshul Parik
+                {user?.firstName && user?.lastName
+                  ? `${user?.firstName} ${user?.lastName}`
+                  : user?.username}
               </h1>
               <div className="flex items-center justify-center gap-12 mb-4">
                 <div className="flex flex-col items-center">
-                  <span className="font-semibold text-gray-700">223</span>
+                  <span className="font-semibold text-gray-700">
+                    {user?._count?.posts}
+                  </span>
                   <span className="text-sm font-semibold text-gray-700">
                     Posts
                   </span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="font-semibold text-gray-700">3.2k</span>
+                  <span className="font-semibold text-gray-700">
+                    {user?._count?.followers}
+                  </span>
                   <span className="text-sm font-semibold text-gray-700">
                     Followers
                   </span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="font-semibold text-gray-700">1.3k</span>
+                  <span className="font-semibold text-gray-700">
+                    {user?._count?.followings}
+                  </span>
                   <span className="text-sm font-semibold text-gray-700">
                     Following
                   </span>
@@ -67,7 +116,7 @@ const ProfilePage = () => {
         </div>
       </div>
       <div className="hidden lg:block w-[30%]">
-        <RightSidebar />
+        <RightSidebar user={user} />
       </div>
     </div>
   );

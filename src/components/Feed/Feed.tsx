@@ -6,11 +6,12 @@ const Feed = () => {
     <>
       {Array(3)
         ?.fill("_")
-        ?.map((_i) => {
+        ?.map((_, index) => {
           return (
             <div
               className="p-4 bg-white rounded-lg shadow-md
                 flex flex-col gap-12"
+              key={`key-${index}`}  
             >
               <Post />
             </div>

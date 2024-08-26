@@ -20,7 +20,6 @@ const ProfileCard = async () => {
     },
   });
 
-  console.log(user, "Anshul");
   if (!user) return null;
 
   return (
@@ -31,7 +30,7 @@ const ProfileCard = async () => {
       <div className="relative">
         <div className="relative w-full h-20">
           <Image
-            src={user?.coverURL || "/noAvatar.jpg"}
+            src={user?.coverURL || "/noCover.jpg"}
             alt=""
             className="absolute object-cover rounded-md"
             fill
@@ -43,7 +42,7 @@ const ProfileCard = async () => {
         >
           <div className="relative w-12 h-12">
             <Image
-              src={user?.avatarURL || "/noCover.jpg"}
+              src={user?.avatarURL || "/noAvatar.jpg"}
               alt=""
               className="absolute object-cover rounded-full ring-1 ring-gray-600"
               fill
@@ -61,9 +60,9 @@ const ProfileCard = async () => {
           <div className="flex">
             {Array(3)
               ?.fill("_")
-              ?.map((_) => {
+              ?.map((_, index) => {
                 return (
-                  <div className="h-3 w-3 relative">
+                  <div key={`key-${index}`} className="h-3 w-3 relative">
                     <Image
                       src="/profile_img.png"
                       alt=""

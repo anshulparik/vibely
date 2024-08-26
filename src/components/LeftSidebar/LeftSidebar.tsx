@@ -12,7 +12,7 @@ import { IoLibrary } from "react-icons/io5";
 import { IoListSharp } from "react-icons/io5";
 import { IoIosAlbums } from "react-icons/io";
 import { BiTask } from "react-icons/bi";
-import Ad from './Ad';
+import Ad from '../Ad';
 
 const LeftSidebar = ({ type }: { type: "home" | "profile" }) => {
   return (

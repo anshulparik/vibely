@@ -8,9 +8,12 @@ const Stories = () => {
       <div className="flex gap-8 w-max">
         {Array(6)
           ?.fill("_")
-          ?.map((_) => {
+          ?.map((_, index) => {
             return (
-              <div className="flex flex-col items-center gap-2 ">
+              <div
+                key={`key-${index}`}
+                className="flex flex-col items-center gap-2 "
+              >
                 <div
                   className="cursor-pointer
                     relative w-14 h-14 md:w-20 md:h-20"

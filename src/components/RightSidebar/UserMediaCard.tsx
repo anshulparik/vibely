@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
+import { User } from "@prisma/client";
 
-const UserMediaCard = ({ userId }: { userId?: string }) => {
+const UserMediaCard = ({ user }: { user?: User }) => {
   return (
     <div
       className="p-4 bg-white rounded-lg shadow-md
@@ -20,9 +21,9 @@ const UserMediaCard = ({ userId }: { userId?: string }) => {
       <div className="flex items-center justify-center gap-6 flex-wrap">
         {Array(6)
           ?.fill("_")
-          ?.map((_) => {
+          ?.map((_, index) => {
             return (
-              <div className="relative w-1/4 h-24">
+              <div key={`key-${index}`} className="relative w-1/4 h-24">
                 <Image
                   src="/post.jpg"
                   alt=""

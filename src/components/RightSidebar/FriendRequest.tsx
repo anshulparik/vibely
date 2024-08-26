@@ -22,9 +22,12 @@ const FriendRequest = () => {
       </div>
       {Array(3)
         ?.fill("_")
-        ?.map(() => {
+        ?.map((_, index) => {
           return (
-            <div className="flex items-center justify-between">
+            <div
+              key={`key-${index}`}
+              className="flex items-center justify-between"
+            >
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 relative">
                   <Image
