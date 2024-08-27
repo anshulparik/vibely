@@ -1,16 +1,14 @@
 "use client";
-import { switchFollowRequest } from "@/actions";
+import { switchBlockRequest, switchFollowRequest } from "@/actions";
 import React, { useState } from "react";
 
 const UserInfoCardInteraction = ({
   userId,
-  currentUserId,
   isUserBlocked,
   isFollowing,
   isFollowingRequestSent,
 }: {
   userId: string;
-  currentUserId: string;
   isUserBlocked: boolean;
   isFollowing: boolean;
   isFollowingRequestSent: boolean;
@@ -35,6 +33,18 @@ const UserInfoCardInteraction = ({
     }
   };
 
+  const triggerBlockAction = async () => {
+    try {
+      await switchBlockRequest(userId);
+      setUserFollowRequest((prev) => ({
+        ...prev,
+        blocked: !prev?.blocked,
+      }));
+    } catch (error) {
+      console.log(error, "triggerBlockAction err!");
+    }
+  };
+
   return (
     <>
       <form action={triggerFollowAction}>
@@ -49,13 +59,15 @@ const UserInfoCardInteraction = ({
             : "Follow"}
         </button>
       </form>
-      <form action="" className="self-end">
-        <span
-          className="text-xs text-red-600 
+      <form action={triggerBlockAction} className="self-end">
+        <button>
+          <span
+            className="text-xs text-red-600 
         font-semibold cursor-pointer"
-        >
-          {userFollowRequest.blocked ? "Unblock User" : "Block User"}
-        </span>
+          >
+            {userFollowRequest.blocked ? "Unblock User" : "Block User"}
+          </span>
+        </button>
       </form>
     </>
   );

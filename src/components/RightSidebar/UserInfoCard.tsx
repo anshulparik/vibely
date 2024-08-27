@@ -26,7 +26,7 @@ const UserInfoCard = async ({ user }: { user: User }) => {
   if (currentUserId) {
     const userBlockedResponse = await prisma?.block?.findFirst({
       where: {
-        blockId: currentUserId,
+        blockerId: currentUserId,
         blockedId: user?.id,
       },
     });
@@ -130,7 +130,6 @@ const UserInfoCard = async ({ user }: { user: User }) => {
         </div>
         <UserInfoCardInteraction 
           userId={user?.id}
-          currentUserId={currentUserId as string}
           isUserBlocked={isUserBlocked}
           isFollowing={isFollowing}
           isFollowingRequestSent={isFollowingRequestSent}

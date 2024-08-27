@@ -58,3 +58,38 @@ export const switchFollowRequest = async (userId: string) => {
     throw new Error("Something went wrong!");
   }
 };
+
+export const switchBlockRequest = async (userId: string) => {
+  const { userId: currentUserId } = auth();
+
+  if (!currentUserId) {
+    throw new Error("User is not authenticated!");
+  }
+
+  try {
+    const existingBlockRequestResponse = await prisma?.block?.findFirst({
+      where: {
+        blockerId: currentUserId,
+        blockedId: userId,
+      },
+    });
+
+    if (existingBlockRequestResponse) {
+      await prisma?.block?.delete({
+        where: {
+          id: existingBlockRequestResponse?.id,
+        },
+      });
+    } else {
+      await prisma?.block?.create({
+        data: {
+          blockerId: currentUserId,
+          blockedId: userId,
+        },
+      });
+    }
+  } catch (error) {
+    console.log(error, "switchBlockRequest err!");
+    throw new Error("Something went wrong!");
+  }
+};

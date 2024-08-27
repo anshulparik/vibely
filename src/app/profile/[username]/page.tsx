@@ -34,7 +34,7 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
   if (currentUserId) {
     const res = await prisma?.block?.findFirst({
       where: {
-        blockId: user.id,
+        blockerId: user.id,
         blockedId: currentUserId,
       },
     });
