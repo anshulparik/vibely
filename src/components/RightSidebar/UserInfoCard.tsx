@@ -9,6 +9,7 @@ import { IoSchool } from "react-icons/io5";
 import { User } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
+import UserInfoCardInteraction from "./UserInfoCardInteraction";
 
 const UserInfoCard = async ({ user }: { user: User }) => {
   const userCreatedAt = new Date(user?.createdAt);
@@ -127,18 +128,13 @@ const UserInfoCard = async ({ user }: { user: User }) => {
             </span>
           </div>
         </div>
-        <button
-          className="text-sm text-white font-semibold bg-sky-500 
-          py-1 px-2 rounded-md"
-        >
-          Follow
-        </button>
-        <span
-          className="text-xs text-red-600 self-end 
-        font-semibold cursor-pointer"
-        >
-          Block User
-        </span>
+        <UserInfoCardInteraction 
+          userId={user?.id}
+          currentUserId={currentUserId as string}
+          isUserBlocked={isUserBlocked}
+          isFollowing={isFollowing}
+          isFollowingRequestSent={isFollowingRequestSent}
+        />
       </div>
     </div>
   );
