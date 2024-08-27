@@ -128,12 +128,14 @@ const UserInfoCard = async ({ user }: { user: User }) => {
             </span>
           </div>
         </div>
-        <UserInfoCardInteraction 
-          userId={user?.id}
-          isUserBlocked={isUserBlocked}
-          isFollowing={isFollowing}
-          isFollowingRequestSent={isFollowingRequestSent}
-        />
+        {currentUserId && currentUserId !== user?.id && (
+          <UserInfoCardInteraction
+            userId={user?.id}
+            isUserBlocked={isUserBlocked}
+            isFollowing={isFollowing}
+            isFollowingRequestSent={isFollowingRequestSent}
+          />
+        )}
       </div>
     </div>
   );
