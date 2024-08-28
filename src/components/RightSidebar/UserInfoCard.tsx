@@ -10,6 +10,7 @@ import { User } from "@prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
 import UserInfoCardInteraction from "./UserInfoCardInteraction";
+import UpdateUser from "./UpdateUser";
 
 const UserInfoCard = async ({ user }: { user: User }) => {
   const userCreatedAt = new Date(user?.createdAt);
@@ -64,9 +65,13 @@ const UserInfoCard = async ({ user }: { user: User }) => {
         flex items-center justify-between"
       >
         <span className="text-gray-400">User Information</span>
-        <Link href="/" className="text-sky-500">
-          See All
-        </Link>
+        {currentUserId === user?.id ? (
+          <UpdateUser />
+        ) : (
+          <Link href="/" className="text-sky-500">
+            See All
+          </Link>
+        )}
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex flex-col">

@@ -4,8 +4,30 @@ import React from "react";
 
 import { MdCheckCircle } from "react-icons/md";
 import { MdCancel } from "react-icons/md";
+import { auth } from "@clerk/nextjs/server";
+import prisma from "@/lib/client";
+import FriendRequestsList from "./FriendRequestsList";
 
-const FriendRequest = () => {
+const FriendRequest = async () => {
+  const { userId } = auth();
+  if (!userId) return null;
+
+  let friendRequests;
+  try {
+    friendRequests = await prisma?.followRequest?.findMany({
+      where: {
+        receiverId: userId,
+      },
+      include: {
+        sender: true,
+      },
+    });
+  } catch (error) {
+    console.log(error, "Error fetching posts with media!");
+  }
+
+  if (friendRequests && friendRequests?.length === 0) return null;
+
   return (
     <div
       className="p-4 bg-white rounded-lg shadow-md
@@ -20,34 +42,7 @@ const FriendRequest = () => {
           See All
         </Link>
       </div>
-      {Array(3)
-        ?.fill("_")
-        ?.map((_, index) => {
-          return (
-            <div
-              key={`key-${index}`}
-              className="flex items-center justify-between"
-            >
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 relative">
-                  <Image
-                    src="/profile_img.png"
-                    alt=""
-                    className="ring-1 rounded-full ring-gray-600 absolute object-cover"
-                    fill
-                  />
-                </div>
-                <span className="text-gray-600 text-sm font-semibold">
-                  Eric John
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MdCheckCircle className="cursor-pointer text-2xl text-green-600" />
-                <MdCancel className="cursor-pointer text-2xl text-red-600" />
-              </div>
-            </div>
-          );
-        })}
+      <FriendRequestsList friendRequests={friendRequests} />
     </div>
   );
 };
