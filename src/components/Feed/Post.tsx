@@ -5,42 +5,52 @@ import { AiFillLike } from "react-icons/ai";
 import { FaCommentAlt } from "react-icons/fa";
 import { FaShare } from "react-icons/fa";
 import Comments from "./Comments";
+import { Post as PostType, User } from "@prisma/client";
 
-const Post = () => {
+type FeedPostType = PostType & {
+  user: User;
+} & {
+  likes: [{ userId: string }];
+} & { _count: { comments: number } };
+
+const Post = ({ post }: { post: FeedPostType }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-4">
           <div className="h-10 w-10 relative">
             <Image
-              src="/profile_img.png"
+              src={post?.user?.avatarURL || "/noAvatar.jpg"}
               alt=""
               className="ring-1 rounded-full ring-gray-600 absolute object-cover"
               fill
             />
           </div>
-          <span className="text-sm font-bold text-gray-600">Anshul Parik</span>
+          <span className="text-sm font-bold text-gray-600">
+            {post?.user?.firstName && post?.user?.lastName
+              ? `${post?.user?.firstName} ${post?.user?.lastName}`
+              : post?.user?.username}
+          </span>
         </div>
         <SlOptions className="text-xl text-gray-600 cursor-pointer" />
       </div>
       {/* post */}
       <div className="flex flex-col gap-4">
-        <div className="w-full min-h-72 md:min-h-96 relative">
-          <Image
-            src="/post.jpg"
-            alt=""
-            className="absolute object-cover rounded-md"
-            fill
-          />
-        </div>
+        {post?.postURL && (
+          <div className="w-full min-h-72 md:min-h-96 relative">
+            <Image
+              src={post?.postURL}
+              alt=""
+              className="absolute object-cover rounded-md"
+              fill
+            />
+          </div>
+        )}
         <p
           className="text-xs md:text-sm text-gray-600 
           border-b-2 pb-2"
         >
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex amet quasi
-          quod velit quae tenetur facere at, beatae labore repudiandae ullam
-          culpa deserunt, aspernatur harum consequuntur quam temporibus dolorum
-          quos!
+          {post?.description}
         </p>
       </div>
       <div className="mb-4 flex items-center justify-between">
@@ -58,8 +68,6 @@ const Post = () => {
         </div>
         <div className="flex items-center gap-2 md:gap-4">
           <FaShare className="md:text-xl cursor-pointer text-gray-600" />
-          <span className="text-gray-300">|</span>
-          <span className="text-gray-400 text-xs 2xl:text-sm">234</span>
         </div>
       </div>
 

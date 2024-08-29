@@ -11,7 +11,6 @@ const AddPost = () => {
   const { userId } = auth();
   if (!userId) return;
 
-
   return (
     <div
       className="p-4 bg-white rounded-lg shadow-md
@@ -28,7 +27,6 @@ const AddPost = () => {
           name="description"
         />
         <BsEmojiSmile className="text-xl text-sky-500 cursor-pointer self-end" />
-        <button>Send</button>
       </form>
 
       <div className="flex items-center justify-evenly flex-wrap">

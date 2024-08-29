@@ -88,7 +88,7 @@ const FriendRequestsList = ({
           );
         })
       ) : (
-        <span className="font-semibold text-gray-600">
+        <span className="text-center font-semibold text-gray-600">
           No friend requests found!
         </span>
       )}

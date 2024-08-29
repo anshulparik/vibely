@@ -52,7 +52,9 @@ const UserMediaCard = async ({ user }: { user?: User }) => {
             );
           })
         ) : (
-          <span className="font-semibold text-gray-600">No media found!</span>
+          <span className="text-center font-semibold text-gray-600">
+            No media found!
+          </span>
         )}
       </div>
     </div>
