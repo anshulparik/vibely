@@ -66,7 +66,7 @@ const UserInfoCard = async ({ user }: { user: User }) => {
       >
         <span className="text-gray-400">User Information</span>
         {currentUserId === user?.id ? (
-          <UpdateUser />
+          <UpdateUser user={user}/>
         ) : (
           <Link href="/" className="text-sky-500">
             See All

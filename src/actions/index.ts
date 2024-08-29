@@ -2,7 +2,10 @@
 
 import prisma from "@/lib/client";
 import { auth } from "@clerk/nextjs/server";
+import { error } from "console";
+import { z } from "zod";
 
+// User follow/friend request
 export const switchFollowRequest = async (userId: string) => {
   const { userId: currentUserId } = auth();
 
@@ -154,5 +157,61 @@ export const declineFollowRequest = async (userId: string) => {
   } catch (error) {
     console.log(error, "declineFollowRequest err!");
     throw new Error("Something went wrong!");
+  }
+};
+
+// Update Profile
+export const updateUserProfile = async (
+  previousState: { success: boolean; error: boolean },
+  payload: { formData: FormData; coverURL: string }
+) => {
+  try {
+    const { formData, coverURL } = payload;
+    const fields = Object.fromEntries(formData);
+    let filteredFields: any = {};
+    for (const key in fields) {
+      if (fields[key]) {
+        filteredFields[key] = fields[key];
+      }
+    }
+
+    const Profile = z.object({
+      coverURL: z.string().optional(),
+      firstName: z.string().max(30).optional(),
+      lastName: z.string().max(30).optional(),
+      description: z.string().max(250).optional(),
+      location: z.string().max(60).optional(),
+      school: z.string().max(60).optional(),
+      work: z.string().max(60).optional(),
+      website: z.string().max(60).optional(),
+    });
+
+    if (coverURL) {
+      filteredFields = { ...filteredFields, coverURL };
+    }
+    const validatedFields = Profile.safeParse(filteredFields);
+
+    if (!validatedFields?.success) {
+      console.log(validatedFields?.error?.flatten()?.fieldErrors);
+      return { success: false, error: true };
+    }
+
+    const { userId } = auth();
+
+    if (!userId) {
+      return { success: false, error: true };
+    }
+
+    await prisma?.user?.update({
+      where: {
+        id: userId,
+      },
+      data: validatedFields?.data,
+    });
+
+    return { success: true, error: false };
+  } catch (error) {
+    console.log(error, "updateUserProfile err!");
+    return { success: false, error: true };
   }
 };
