@@ -1,11 +1,9 @@
 import Image from "next/image";
 import React from "react";
 import { SlOptions } from "react-icons/sl";
-import { AiFillLike } from "react-icons/ai";
-import { FaCommentAlt } from "react-icons/fa";
-import { FaShare } from "react-icons/fa";
 import Comments from "./Comments";
 import { Post as PostType, User } from "@prisma/client";
+import PostInteraction from "./PostInteraction";
 
 type FeedPostType = PostType & {
   user: User;
@@ -53,24 +51,11 @@ const Post = ({ post }: { post: FeedPostType }) => {
           {post?.description}
         </p>
       </div>
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex gap-6 md:gap-8">
-          <div className="flex items-center gap-2 md:gap-4">
-            <AiFillLike className="md:text-2xl cursor-pointer text-gray-600" />
-            <span className="text-gray-300">|</span>
-            <span className="text-gray-400 text-xs 2xl:text-sm">123</span>
-          </div>
-          <div className="flex items-center gap-2 md:gap-4">
-            <FaCommentAlt className="md:text-xl cursor-pointer text-gray-600" />
-            <span className="text-gray-300">|</span>
-            <span className="text-gray-400 text-xs 2xl:text-sm">343</span>
-          </div>
-        </div>
-        <div className="flex items-center gap-2 md:gap-4">
-          <FaShare className="md:text-xl cursor-pointer text-gray-600" />
-        </div>
-      </div>
-
+      <PostInteraction
+        postId={post?.id}
+        likes={post?.likes?.map((item) => item?.userId)}
+        commentsCount={post?._count?.comments}
+      />
       <Comments />
     </div>
   );

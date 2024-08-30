@@ -2,7 +2,6 @@
 
 import prisma from "@/lib/client";
 import { auth } from "@clerk/nextjs/server";
-import { error } from "console";
 import { z } from "zod";
 
 // User follow/friend request
@@ -213,5 +212,40 @@ export const updateUserProfile = async (
   } catch (error) {
     console.log(error, "updateUserProfile err!");
     return { success: false, error: true };
+  }
+};
+
+// Switch Likes
+export const switchLike = async (postId: number) => {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error("User is not authenticated!");
+    }
+
+    const existingLike = await prisma?.like?.findFirst({
+      where: {
+        postId,
+        userId,
+      },
+    });
+
+    if (existingLike) {
+      await prisma?.like?.delete({
+        where: {
+          id: existingLike?.id,
+        },
+      });
+    } else {
+      await prisma?.like?.create({
+        data: {
+          postId,
+          userId,
+        },
+      });
+    }
+  } catch (error) {
+    console.log(error, "switchLike err!");
+    throw new Error("Something went wrong!");
   }
 };
