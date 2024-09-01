@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/client";
 import { auth } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 // User follow/friend request
@@ -271,7 +272,38 @@ export const addComment = async (postId: number, description: string) => {
 
     return createdComment;
   } catch (error) {
-    console.log(error, "switchLike err!");
+    console.log(error, "addComment err!");
+    throw new Error("Something went wrong!");
+  }
+};
+
+// Add Post
+export const addPost = async (formData: FormData, postImage: string) => {
+  try {
+    const description = formData?.get("description") as string;
+    const Description = z.string().min(1).max(255);
+    const validatedDescription = Description.safeParse(description);
+
+    if (!validatedDescription?.success) {
+      return;
+    }
+
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error("User is not authenticated!");
+    }
+
+    await prisma?.post?.create({
+      data: {
+        description: validatedDescription?.data,
+        userId,
+        postURL: postImage,
+      },
+    });
+
+    revalidatePath("/");
+  } catch (error) {
+    console.log(error, "addPost err!");
     throw new Error("Something went wrong!");
   }
 };
