@@ -2,7 +2,7 @@ import AddPost from "@/components/AddPost";
 import Feed from "@/components/Feed/Feed";
 import LeftSidebar from "@/components/LeftSidebar/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
-import Stories from "@/components/Stories";
+import Stories from "@/components/Story/Stories";
 
 const Homepage = () => {
   return (

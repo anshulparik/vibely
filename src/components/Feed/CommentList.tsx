@@ -26,8 +26,8 @@ const CommentList = ({
   const triggerCommentAction = async () => {
     try {
       if (!user || !description) return;
-      const createdCOmment = await addComment(postId, description);
-      setCommentState((prev) => [...prev, createdCOmment]);
+      const createdComment = await addComment(postId, description);
+      setCommentState((prev) => [...prev, createdComment]);
     } catch (error) {
       console.log(error, "Failed to add comment!");
     }
