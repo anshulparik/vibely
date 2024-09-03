@@ -337,13 +337,35 @@ export const addStory = async (storyImage: string) => {
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
       },
       include: {
-        user: true
-      }
+        user: true,
+      },
     });
 
     return createdStory;
   } catch (error) {
     console.log(error, "addStory err!");
+    throw new Error("Something went wrong!");
+  }
+};
+
+// Delete Post
+export const deletePost = async (postId: number) => {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      throw new Error("User is not authenticated!");
+    }
+
+    await prisma?.post?.delete({
+      where: {
+        id: postId,
+        userId,
+      },
+    });
+
+    revalidatePath("/");
+  } catch (error) {
+    console.log(error, "deletePost err!");
     throw new Error("Something went wrong!");
   }
 };
