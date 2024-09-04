@@ -6,8 +6,6 @@ import MobileMenu from "./MobileMenu";
 import { FaHome } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { FaImages } from "react-icons/fa";
-import { ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
-import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 import { BiSolidMessageSquareDetail } from "react-icons/bi";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
@@ -58,7 +56,7 @@ const Navbar = () => {
 
       {/* RIGHT */}
       <div className="w-[30%] flex items-center gap-4 xl:gap-8 justify-end">
-        <ClerkLoading>
+        {false && (
           <div
             className="text-sky-500 inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-primary motion-reduce:animate-[spin_1.5s_linear_infinite]"
             role="status"
@@ -67,25 +65,25 @@ const Navbar = () => {
               Loading...
             </span>
           </div>
-        </ClerkLoading>
-        <ClerkLoaded>
-          <SignedIn>
-            <div className="hidden md:flex text-sky-500 items-center gap-3">
-              <FaPeopleGroup className="cursor-pointer text-xl" />
-              <BiSolidMessageSquareDetail className="cursor-pointer text-xl" />
-              <IoNotifications className="cursor-pointer text-xl" />
-            </div>
-            <UserButton />
-          </SignedIn>
-          <SignedOut>
-            <div className="hidden md:flex cursor-pointer text-sky-500 items-center gap-2">
-              <FaUserCircle className="text-2xl" />
-              <Link href="/sign-in" className="font-bold">
-                Sign In
-              </Link>
-            </div>
-          </SignedOut>
-        </ClerkLoaded>
+        )}
+
+        {false && (
+          <div className="hidden md:flex text-sky-500 items-center gap-3">
+            <FaPeopleGroup className="cursor-pointer text-xl" />
+            <BiSolidMessageSquareDetail className="cursor-pointer text-xl" />
+            <IoNotifications className="cursor-pointer text-xl" />
+          </div>
+        )}
+        {false && "prfile"}
+
+        {
+          <div className="hidden md:flex cursor-pointer text-sky-500 items-center gap-2">
+            <FaUserCircle className="text-2xl" />
+            <Link href="/sign-in" className="font-bold">
+              Sign In
+            </Link>
+          </div>
+        }
         <MobileMenu />
       </div>
     </nav>

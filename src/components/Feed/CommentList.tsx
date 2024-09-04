@@ -7,7 +7,6 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { SlOptions } from "react-icons/sl";
 import { FaReply } from "react-icons/fa";
 import { Comment, User } from "@prisma/client";
-import { useUser } from "@clerk/nextjs";
 import { addComment } from "@/actions";
 
 type CommentWithUser = Comment & { user: User };
@@ -19,7 +18,8 @@ const CommentList = ({
   comments: CommentWithUser[];
   postId: number;
 }) => {
-  const { user } = useUser();
+  // const { user } = useUser();
+  const user: any = {}
   const [commentState, setCommentState] = useState(comments);
   const [description, setDescription] = useState("");
 

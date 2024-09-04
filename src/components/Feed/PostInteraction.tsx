@@ -1,7 +1,6 @@
 "use client";
 
 import { switchLike } from "@/actions";
-import { useAuth } from "@clerk/nextjs";
 import React, { useState } from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaCommentAlt } from "react-icons/fa";
@@ -16,7 +15,7 @@ const PostInteraction = ({
   likes: string[];
   commentsCount: number;
 }) => {
-  const { isLoaded, userId } = useAuth();
+  const { isLoaded, userId } = { isLoaded: true, userId: "2" };
   const [likeState, setLikeState] = useState({
     likeCount: likes?.length,
     isLiked: userId ? likes?.includes(userId) : false,

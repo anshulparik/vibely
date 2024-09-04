@@ -3,16 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^5.3.1",
     "@prisma/client": "^5.18.0",
+    "@types/bcryptjs": "^2.4.6",
     "babel-plugin-react-compiler": "^0.0.0-experimental-938cd9a-20240601",
+    "bcryptjs": "^2.4.3",
     "next": "15.0.0-rc.0",
+    "next-auth": "^5.0.0-beta.20",
     "next-cloudinary": "^6.11.0",
     "react": "19.0.0-rc-f994737d14-20240522",
     "react-dom": "19.0.0-rc-f994737d14-20240522",

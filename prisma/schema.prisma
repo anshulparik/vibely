@@ -8,33 +8,37 @@ datasource db {
 }
 
 model User {
-  id          String   @id
-  username    String   @unique
-  avatarURL   String
-  coverURL    String?
-  firstName   String?
-  lastName    String?
-  description String?
-  location    String?
-  school      String?
-  work        String?
-  website     String?
-  createdAt   DateTime @default(now())
+  id             Int      @id @default(autoincrement())
+  username       String   @unique
+  email          String   @unique
+  password       String
+  role           String   @default("user")
+  authProviderId String?
+  avatarURL      String?
+  coverURL       String?
+  firstName      String?
+  lastName       String?
+  description    String?
+  location       String?
+  school         String?
+  work           String?
+  website        String?
+  createdAt      DateTime @default(now())
 
   // relations
-  posts      Post[] // no key
-  likes      Like[]
-  comments   Comment[]
-  story      Story?
+  posts    Post[] // no key
+  likes    Like[]
+  comments Comment[]
+  story    Story?
 
   followers  Follower[] @relation("UserFollowers")
   followings Follower[] @relation("UserFollowings")
 
-  senders    FollowRequest[] @relation("FollowRequestsSent")
-  receivers  FollowRequest[] @relation("FollowRequestsReceived")
+  senders   FollowRequest[] @relation("FollowRequestsSent")
+  receivers FollowRequest[] @relation("FollowRequestsReceived")
 
-  Blocker      Block[] @relation("Blocker")
-  Blocked    Block[] @relation("Blocked")
+  Blocker Block[] @relation("Blocker")
+  Blocked Block[] @relation("Blocked")
 }
 
 model Post {
@@ -45,8 +49,8 @@ model Post {
   updatedAt   DateTime @updatedAt
 
   // relations
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade) // no key
-  userId String // key
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade) // no key
+  userId Int // key
 
   likes    Like[]
   comments Comment[]
@@ -57,8 +61,8 @@ model Like {
   createdAt DateTime @default(now())
 
   // relations
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
 
   post   Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int?
@@ -74,8 +78,8 @@ model Comment {
   updatedAt   DateTime @updatedAt
 
   // relations
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
 
   post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
@@ -88,11 +92,11 @@ model Follower {
   createdAt DateTime @default(now())
 
   // relations
-  follower   User   @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
-  followerId String
+  follower   User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId Int
 
-  following   User   @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
-  followingId String
+  following   User @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId Int
 }
 
 model FollowRequest {
@@ -100,11 +104,11 @@ model FollowRequest {
   createdAt DateTime @default(now())
 
   // relations
-  sender   User   @relation("FollowRequestsSent", fields: [senderId], references: [id], onDelete: Cascade)
-  senderId String
+  sender   User @relation("FollowRequestsSent", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId Int
 
-  receiver   User   @relation("FollowRequestsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
-  receiverId String
+  receiver   User @relation("FollowRequestsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId Int
 
   @@unique([senderId, receiverId])
 }
@@ -114,11 +118,11 @@ model Block {
   createdAt DateTime @default(now())
 
   // relations
-  blocker   User   @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
-  blockerId String
+  blocker   User @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockerId Int
 
-  blocked   User   @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
-  blockedId String
+  blocked   User @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  blockedId Int
 
   @@unique([blockerId, blockedId])
 }
@@ -127,11 +131,11 @@ model Story {
   id        Int      @id @default(autoincrement())
   storyURL  String
   createdAt DateTime @default(now())
-  expiresAt DateTime 
+  expiresAt DateTime
 
   // relations
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @unique
 }
 
 // npx prisma db push
