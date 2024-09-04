@@ -41,6 +41,8 @@ export const registerUser = async (formData: FormData) => {
         password: hashedPassword,
       },
     });
+
+    console.log(user, "Registered successfully!");
   } catch (error) {
     console.log(error, "registerUser err!");
     throw new Error("Somethig went wrong!");
@@ -57,7 +59,7 @@ export const userLogin = async (formData: FormData) => {
       throw new Error("Please fill all the fields!");
     }
 
-    const response = await signIn("Credentials", {
+    const response = await signIn("credentials", {
       redirect: false,
       callbackUrl: "/",
       email,
@@ -67,6 +69,7 @@ export const userLogin = async (formData: FormData) => {
     if (response?.error) {
       throw new Error(response.error);
     }
+    console.log(response, "Logged in successfully!");
   } catch (error) {
     const someError = error as CredentialsSignin;
     return someError.cause;

@@ -1,9 +1,12 @@
 import { googleLogin, userLogin } from "@/actions/user";
+import { auth } from "@/auth";
 import Link from "next/link";
 import React from "react";
 import { FaGoogle } from "react-icons/fa";
 
-const Registration = () => {
+const Login = async () => {
+  const session = await auth();
+  console.log(session, "===== session")
   return (
     <div
       className="bg-sky-100 md:px-8 lg:px-16 xl:px-32 2xl:px-64 
@@ -56,4 +59,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default Login;

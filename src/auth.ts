@@ -45,7 +45,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const userData = {
           id: user?.id?.toString(),
-          userame: user?.username,
+          username: user?.username,
           email: user?.email,
           role: user?.role,
         };
@@ -56,6 +56,62 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: "/auth/login",
+  },
+  callbacks: {
+    // updating user session
+    async session({ session, token }) {
+      if (token?.sub && token?.role && token?.username) {
+        session.user.id = token?.sub;
+        session.user.role = token?.role;
+        session.user.username = token?.username;
+      }
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.role = user?.role;
+        token.username = user?.username;
+      }
+
+      return token;
+    },
+    signIn: async ({ user, account }) => {
+      if (account?.provider === "google") {
+        try {
+          const { email, id } = user;
+          const existingEmail = await prisma?.user?.findFirst({
+            where: {
+              email: email as string,
+            },
+          });
+          const existingUsername = await prisma?.user?.findFirst({
+            where: {
+              username: `${email?.split("@")[0]}`,
+            },
+          });
+
+          if (!existingEmail && !existingUsername) {
+            await prisma?.user?.create({
+              data: {
+                username: `${email?.split("@")[0]}`,
+                email: email as string,
+                authProviderId: id,
+                password: "",
+              },
+            });
+          } else {
+            return true;
+          }
+        } catch (error) {
+          throw new Error("Error while creating user!");
+        }
+      }
+      if (account?.provider === "credentials") {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
 });
 
