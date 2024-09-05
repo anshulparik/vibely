@@ -1,11 +1,11 @@
 import Feed from "@/components/Feed/Feed";
 import LeftSidebar from "@/components/LeftSidebar/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
-import React from "react";
+import React, { use } from "react";
 import Image from "next/image";
 import prisma from "@/lib/client";
 import { notFound } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
+import { getUserSession } from "@/app/auth/login/page";
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const username = params?.username;
@@ -28,14 +28,15 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
 
   if (!user) return notFound();
 
-  const { userId: currentUserId } = auth();
+  const userSession = await getUserSession();
+  const currentUserId = userSession?.id;
   let isBlocked;
 
   if (currentUserId) {
     const res = await prisma?.block?.findFirst({
       where: {
         blockerId: user.id,
-        blockedId: currentUserId,
+        blockedId: +currentUserId,
       },
     });
 
@@ -112,7 +113,7 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
               </div>
             </div>
           </div>
-          <Feed username={user?.username}/>
+          <Feed username={user?.username} />
         </div>
       </div>
       <div className="hidden lg:block w-[30%]">

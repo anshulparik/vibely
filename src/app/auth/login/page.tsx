@@ -1,12 +1,20 @@
 import { googleLogin, userLogin } from "@/actions/user";
 import { auth } from "@/auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 import { FaGoogle } from "react-icons/fa";
 
-const Login = async () => {
+export const getUserSession = async () => {
   const session = await auth();
-  console.log(session, "===== session")
+  const user = session?.user;
+  return user;
+};
+
+const Login = async () => {
+  const user = await getUserSession();
+  if (user) redirect("/");
+
   return (
     <div
       className="bg-sky-100 md:px-8 lg:px-16 xl:px-32 2xl:px-64 

@@ -79,38 +79,53 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (account?.provider === "google") {
         try {
           const { email, id } = user;
-          const existingEmail = await prisma?.user?.findFirst({
+
+          // Check for existing user by email
+          const existingUser = await prisma?.user?.findUnique({
             where: {
               email: email as string,
             },
           });
-          const existingUsername = await prisma?.user?.findFirst({
-            where: {
-              username: `${email?.split("@")[0]}`,
-            },
-          });
 
-          if (!existingEmail && !existingUsername) {
+          // If user does not exist, create a new user
+          if (!existingUser) {
+            // Generate a unique username
+            let username = `${email?.split("@")[0]}`;
+            let uniqueUsername = username;
+            let counter = 1;
+            while (
+              await prisma?.user?.findUnique({
+                where: { username: uniqueUsername },
+              })
+            ) {
+              uniqueUsername = `${username}${counter++}`;
+            }
+
             await prisma?.user?.create({
               data: {
-                username: `${email?.split("@")[0]}`,
+                username: uniqueUsername,
                 email: email as string,
                 authProviderId: id,
-                password: "",
+                password: "", // No password needed for OAuth users
               },
             });
-          } else {
-            return true;
+
+            // Optionally log the user creation
+            console.log(`Created new user with email: ${email}`);
           }
+
+          return true; // Allow sign-in
         } catch (error) {
-          throw new Error("Error while creating user!");
+          console.error("Error during Google sign-in:", error);
+          return false; // Deny sign-in
         }
       }
+
       if (account?.provider === "credentials") {
-        return true;
-      } else {
-        return false;
+        return true; // Allow sign-in for credentials provider
       }
+
+      return false; // Deny sign-in for unsupported providers
     },
   },
 });

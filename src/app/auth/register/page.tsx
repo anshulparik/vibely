@@ -1,9 +1,14 @@
 import { googleLogin, registerUser } from "@/actions/user";
+import { getUserSession } from "../login/page";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 import { FaGoogle } from "react-icons/fa";
 
-const Register = () => {
+const Register = async () => {
+  const user = await getUserSession();
+  if (user) redirect("/");
+
   return (
     <div
       className="bg-sky-100 md:px-8 lg:px-16 xl:px-32 2xl:px-64 
@@ -11,7 +16,7 @@ const Register = () => {
     >
       <div
         className="p-4 bg-white rounded-lg shadow-md
-      flex flex-col gap-8"
+        flex flex-col gap-8"
       >
         <form action={registerUser} className="flex flex-col gap-8">
           <div className="text-sm flex flex-wrap justify-between gap-1 xl:gap-4">
