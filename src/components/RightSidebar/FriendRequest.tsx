@@ -1,22 +1,20 @@
 import Link from "next/link";
-import Image from "next/image";
 import React from "react";
 
-import { MdCheckCircle } from "react-icons/md";
-import { MdCancel } from "react-icons/md";
-import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
 import FriendRequestsList from "./FriendRequestsList";
+import { getUserSession } from "@/lib/getUserSession";
 
 const FriendRequest = async () => {
-  const { userId } = auth();
+  const userSession = await getUserSession();
+  const userId = userSession?.id;
   if (!userId) return null;
 
   let friendRequests;
   try {
     friendRequests = await prisma?.followRequest?.findMany({
       where: {
-        receiverId: userId,
+        receiverId: +userId,
       },
       include: {
         sender: true,

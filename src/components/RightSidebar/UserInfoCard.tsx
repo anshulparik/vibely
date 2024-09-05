@@ -7,10 +7,10 @@ import { FaLocationDot } from "react-icons/fa6";
 import { MdWork } from "react-icons/md";
 import { IoSchool } from "react-icons/io5";
 import { User } from "@prisma/client";
-import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
 import UserInfoCardInteraction from "./UserInfoCardInteraction";
 import UpdateUser from "./UpdateUser";
+import { getUserSession } from "@/lib/getUserSession";
 
 const UserInfoCard = async ({ user }: { user: User }) => {
   const userCreatedAt = new Date(user?.createdAt);
@@ -23,11 +23,13 @@ const UserInfoCard = async ({ user }: { user: User }) => {
   let isFollowing = false;
   let isFollowingRequestSent = false;
 
-  const { userId: currentUserId } = auth();
+  const userSession = await getUserSession();
+  const currentUserId = userSession?.id;
+
   if (currentUserId) {
     const userBlockedResponse = await prisma?.block?.findFirst({
       where: {
-        blockerId: currentUserId,
+        blockerId: +currentUserId,
         blockedId: user?.id,
       },
     });
@@ -36,7 +38,7 @@ const UserInfoCard = async ({ user }: { user: User }) => {
 
     const followingResponse = await prisma?.follower?.findFirst({
       where: {
-        followerId: currentUserId,
+        followerId: +currentUserId,
         followingId: user?.id,
       },
     });
@@ -45,7 +47,7 @@ const UserInfoCard = async ({ user }: { user: User }) => {
 
     const followRequestResponse = await prisma?.followRequest?.findFirst({
       where: {
-        senderId: currentUserId,
+        senderId: +currentUserId,
         receiverId: user?.id,
       },
     });
@@ -65,8 +67,8 @@ const UserInfoCard = async ({ user }: { user: User }) => {
         flex items-center justify-between"
       >
         <span className="text-gray-400">User Information</span>
-        {currentUserId === user?.id ? (
-          <UpdateUser user={user}/>
+        {currentUserId && +currentUserId === user?.id ? (
+          <UpdateUser user={user} />
         ) : (
           <Link href="/" className="text-sky-500">
             See All
@@ -133,7 +135,7 @@ const UserInfoCard = async ({ user }: { user: User }) => {
             </span>
           </div>
         </div>
-        {currentUserId && currentUserId !== user?.id && (
+        {currentUserId && +currentUserId !== user?.id && (
           <UserInfoCardInteraction
             userId={user?.id}
             isUserBlocked={isUserBlocked}

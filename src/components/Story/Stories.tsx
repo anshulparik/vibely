@@ -1,10 +1,11 @@
 import prisma from "@/lib/client";
-import { auth } from "@clerk/nextjs/server";
 import React from "react";
 import StoryList from "./StoryList";
+import { getUserSession } from "@/lib/getUserSession";
 
 const Stories = async () => {
-  const { userId: currentUserId } = auth();
+  const user = await getUserSession();
+  const currentUserId = user?.id;
   if (!currentUserId) return null;
 
   const stories = await prisma?.story?.findMany({
@@ -17,13 +18,13 @@ const Stories = async () => {
           user: {
             followers: {
               some: {
-                followerId: currentUserId,
+                followerId: +currentUserId,
               },
             },
           },
         },
         {
-          userId: currentUserId,
+          userId: +currentUserId,
         },
       ],
     },

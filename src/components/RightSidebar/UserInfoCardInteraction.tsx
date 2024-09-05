@@ -8,7 +8,7 @@ const UserInfoCardInteraction = ({
   isFollowing,
   isFollowingRequestSent,
 }: {
-  userId: string;
+  userId: number;
   isUserBlocked: boolean;
   isFollowing: boolean;
   isFollowingRequestSent: boolean;

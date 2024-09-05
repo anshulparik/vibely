@@ -5,7 +5,7 @@ import React, { use } from "react";
 import Image from "next/image";
 import prisma from "@/lib/client";
 import { notFound } from "next/navigation";
-import { getUserSession } from "@/app/auth/login/page";
+import { getUserSession } from "@/lib/getUserSession";
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const username = params?.username;

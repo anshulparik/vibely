@@ -1,23 +1,29 @@
 "use client";
 
 import { addStory } from "@/actions";
-import { useUser } from "@clerk/nextjs";
 import { Story, User } from "@prisma/client";
+import { getSession } from "next-auth/react";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 type StoryWithUser = Story & {
   user: User;
 };
 
 const StoryList = ({ stories }: { stories: StoryWithUser[] }) => {
-  const { user, isLoaded } = useUser();
-  if (!user && !isLoaded) return "Loading...";
-  if (!user && isLoaded) return null;
-
+  const [user, setUser] = useState<any>(null);
   const [storyImage, setStoryImage] = useState<any>();
   const [storiesState, setStoriesState] = useState(stories);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userSession = await getSession();
+      setUser(userSession?.user);
+    };
+
+    fetchUser();
+  }, []);
 
   const triggerStoryAction = async () => {
     try {
@@ -29,6 +35,8 @@ const StoryList = ({ stories }: { stories: StoryWithUser[] }) => {
       console.log(error, "Error adding story!");
     }
   };
+
+  if (!user) return null;
 
   return (
     <>
@@ -48,9 +56,7 @@ const StoryList = ({ stories }: { stories: StoryWithUser[] }) => {
                 relative w-14 h-14 md:w-20 md:h-20"
               >
                 <Image
-                  src={
-                    storyImage?.secure_url || user?.imageUrl || "/noAvatar.jpg"
-                  }
+                  src={storyImage?.secure_url || "/noAvatar.jpg"}
                   alt=""
                   fill
                   className="absolute object-cover 

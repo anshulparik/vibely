@@ -1,15 +1,16 @@
 import { googleLogin, userLogin } from "@/actions/user";
 import { auth } from "@/auth";
+import { getUserSession } from "@/lib/getUserSession";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import { FaGoogle } from "react-icons/fa";
 
-export const getUserSession = async () => {
-  const session = await auth();
-  const user = session?.user;
-  return user;
-};
+// export const getUserSession = async () => {
+//   const session = await auth();
+//   const user = session?.user;
+//   return user;
+// };
 
 const Login = async () => {
   const user = await getUserSession();

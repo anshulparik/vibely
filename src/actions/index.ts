@@ -1,12 +1,14 @@
 "use server";
 
+import { getUserSession } from "@/lib/getUserSession";
 import prisma from "@/lib/client";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 // User follow/friend request
-export const switchFollowRequest = async (userId: string) => {
-  const { userId: currentUserId } = {};
+export const switchFollowRequest = async (userId: number) => {
+    const user = await getUserSession();
+    const currentUserId = user?.id;
 
   if (!currentUserId) {
     throw new Error("User is not authenticated!");
@@ -16,8 +18,8 @@ export const switchFollowRequest = async (userId: string) => {
     // checking if currentUser is already following the user.
     const existingFollowingResponse = await prisma?.follower?.findFirst({
       where: {
-        followerId: currentUserId,
-        followingId: userId,
+        followerId: +currentUserId,
+        followingId: +userId,
       },
     });
 
@@ -33,8 +35,8 @@ export const switchFollowRequest = async (userId: string) => {
       const existingFollowRequestResponse =
         await prisma?.followRequest?.findFirst({
           where: {
-            senderId: currentUserId,
-            receiverId: userId,
+            senderId: +currentUserId,
+            receiverId: +userId,
           },
         });
 
@@ -49,8 +51,8 @@ export const switchFollowRequest = async (userId: string) => {
         // if not then sending the follow request to the user
         await prisma?.followRequest?.create({
           data: {
-            senderId: currentUserId,
-            receiverId: userId,
+            senderId: +currentUserId,
+            receiverId: +userId,
           },
         });
       }
@@ -61,8 +63,9 @@ export const switchFollowRequest = async (userId: string) => {
   }
 };
 
-export const switchBlockRequest = async (userId: string) => {
-  const { userId: currentUserId } = {};
+export const switchBlockRequest = async (userId: number) => {
+      const user = await getUserSession();
+      const currentUserId = user?.id;
 
   if (!currentUserId) {
     throw new Error("User is not authenticated!");
@@ -71,7 +74,7 @@ export const switchBlockRequest = async (userId: string) => {
   try {
     const existingBlockRequestResponse = await prisma?.block?.findFirst({
       where: {
-        blockerId: currentUserId,
+        blockerId: +currentUserId,
         blockedId: userId,
       },
     });
@@ -85,7 +88,7 @@ export const switchBlockRequest = async (userId: string) => {
     } else {
       await prisma?.block?.create({
         data: {
-          blockerId: currentUserId,
+          blockerId: +currentUserId,
           blockedId: userId,
         },
       });
@@ -97,7 +100,8 @@ export const switchBlockRequest = async (userId: string) => {
 };
 
 export const acceptFollowRequest = async (userId: string) => {
-  const { userId: currentUserId } = {};
+  const user = await getUserSession();
+  const currentUserId = user?.id;
 
   if (!currentUserId) {
     throw new Error("User is not authenticated!");
@@ -106,8 +110,8 @@ export const acceptFollowRequest = async (userId: string) => {
   try {
     const existingFollowRequest = await prisma?.followRequest?.findFirst({
       where: {
-        senderId: userId,
-        receiverId: currentUserId,
+        senderId: +userId,
+        receiverId: +currentUserId,
       },
     });
 
@@ -120,8 +124,8 @@ export const acceptFollowRequest = async (userId: string) => {
 
       await prisma?.follower?.create({
         data: {
-          followerId: userId,
-          followingId: currentUserId,
+          followerId: +userId,
+          followingId: +currentUserId,
         },
       });
     }
@@ -132,7 +136,8 @@ export const acceptFollowRequest = async (userId: string) => {
 };
 
 export const declineFollowRequest = async (userId: string) => {
-  const { userId: currentUserId } = {};
+  const user = await getUserSession();
+  const currentUserId = user?.id;
 
   if (!currentUserId) {
     throw new Error("User is not authenticated!");
@@ -141,8 +146,8 @@ export const declineFollowRequest = async (userId: string) => {
   try {
     const existingFollowRequest = await prisma?.followRequest?.findFirst({
       where: {
-        senderId: userId,
-        receiverId: currentUserId,
+        senderId: +userId,
+        receiverId: +currentUserId,
       },
     });
 
@@ -195,7 +200,8 @@ export const updateUserProfile = async (
       return { success: false, error: true };
     }
 
-    const { userId } = {};
+    const userSession = await getUserSession();
+    const userId = userSession?.id;
 
     if (!userId) {
       return { success: false, error: true };
@@ -203,7 +209,7 @@ export const updateUserProfile = async (
 
     await prisma?.user?.update({
       where: {
-        id: userId,
+        id: +userId,
       },
       data: validatedFields?.data,
     });
@@ -218,7 +224,9 @@ export const updateUserProfile = async (
 // Switch Likes
 export const switchLike = async (postId: number) => {
   try {
-    const { userId } = {};
+    const userSession = await getUserSession();  
+    const userId = userSession?.id;
+    
     if (!userId) {
       throw new Error("User is not authenticated!");
     }
@@ -226,7 +234,7 @@ export const switchLike = async (postId: number) => {
     const existingLike = await prisma?.like?.findFirst({
       where: {
         postId,
-        userId,
+        userId: +userId,
       },
     });
 
@@ -240,7 +248,7 @@ export const switchLike = async (postId: number) => {
       await prisma?.like?.create({
         data: {
           postId,
-          userId,
+          userId: +userId,
         },
       });
     }
@@ -253,7 +261,9 @@ export const switchLike = async (postId: number) => {
 // Add Comment
 export const addComment = async (postId: number, description: string) => {
   try {
-    const { userId } = {};
+    const userSession = await getUserSession();
+    const userId = userSession?.id;
+    
     if (!userId) {
       throw new Error("User is not authenticated!");
     }
@@ -262,7 +272,7 @@ export const addComment = async (postId: number, description: string) => {
       data: {
         postId,
         description,
-        userId,
+        userId: +userId,
       },
       include: {
         user: true,
@@ -287,7 +297,9 @@ export const addPost = async (formData: FormData, postImage: string) => {
       return;
     }
 
-    const { userId } = {};
+    const userSession = await getUserSession();
+    const userId = userSession?.id;
+    
     if (!userId) {
       throw new Error("User is not authenticated!");
     }
@@ -295,7 +307,7 @@ export const addPost = async (formData: FormData, postImage: string) => {
     await prisma?.post?.create({
       data: {
         description: validatedDescription?.data,
-        userId,
+        userId: +userId,
         postURL: postImage,
       },
     });
@@ -310,14 +322,16 @@ export const addPost = async (formData: FormData, postImage: string) => {
 // Add Story
 export const addStory = async (storyImage: string) => {
   try {
-    const { userId } = {};
+    const userSession = await getUserSession();
+    const userId = userSession?.id;
+    
     if (!userId) {
       throw new Error("User is not authenticated!");
     }
 
     const existingStory = await prisma?.story?.findFirst({
       where: {
-        userId,
+        userId: +userId,
       },
     });
 
@@ -331,7 +345,7 @@ export const addStory = async (storyImage: string) => {
 
     const createdStory = await prisma?.story?.create({
       data: {
-        userId,
+        userId: +userId,
         storyURL: storyImage,
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
       },
@@ -350,7 +364,9 @@ export const addStory = async (storyImage: string) => {
 // Delete Post
 export const deletePost = async (postId: number) => {
   try {
-    const { userId } = {};
+    const userSession = await getUserSession();
+    const userId = userSession?.id;
+
     if (!userId) {
       throw new Error("User is not authenticated!");
     }
@@ -358,7 +374,7 @@ export const deletePost = async (postId: number) => {
     await prisma?.post?.delete({
       where: {
         id: postId,
-        userId,
+        userId: +userId,
       },
     });
 

@@ -1,10 +1,11 @@
 import React from "react";
 import Post from "./Post";
-import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
+import { getUserSession } from "@/lib/getUserSession";
 
 const Feed = async ({ username }: { username?: string }) => {
-  const { userId } = auth();
+  const user = await getUserSession();
+  const userId = user?.id;
 
   let posts;
 
@@ -38,7 +39,7 @@ const Feed = async ({ username }: { username?: string }) => {
     if (!username && userId) {
       const following = await prisma.follower.findMany({
         where: {
-          followerId: userId,
+          followerId: +userId,
         },
         select: {
           followingId: true,
@@ -46,7 +47,7 @@ const Feed = async ({ username }: { username?: string }) => {
       });
 
       const followingIds = following?.map((item) => item?.followingId);
-      const ids = [userId, ...followingIds];
+      const ids = [+userId, ...followingIds];
 
       posts = await prisma?.post?.findMany({
         where: {
@@ -87,7 +88,7 @@ const Feed = async ({ username }: { username?: string }) => {
                 flex flex-col gap-12"
               key={post?.id}
             >
-              <Post post={post}/>
+              <Post post={post} />
             </div>
           );
         })

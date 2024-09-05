@@ -7,19 +7,13 @@ import { MdEvent } from "react-icons/md";
 import { FaVideo } from "react-icons/fa";
 import { FaImage } from "react-icons/fa";
 import prisma from "@/lib/client";
-import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import { CldUploadWidget } from "next-cloudinary";
 import { addPost } from "@/actions";
 
 const AddPost = () => {
-  const { user, isLoaded } = useUser();
   const [description, setDescription] = useState("");
   const [postImage, setPostImage] = useState<any>();
-
-  if (!isLoaded) {
-    return "Loading...";
-  }
 
   return (
     <div
@@ -29,7 +23,7 @@ const AddPost = () => {
       <div className="flex items-center gap-4 mb-3">
         <div className="relative w-8 h-8">
           <Image
-            src={user?.imageUrl || "/noAvatar.jpg"}
+            src={"/noAvatar.jpg"}
             alt=""
             fill
             className="ring-1 rounded-full ring-gray-600 absolute object-cover"

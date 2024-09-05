@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MobileMenu from "./MobileMenu";
 
 import { FaHome } from "react-icons/fa";
@@ -10,8 +10,21 @@ import { BiSolidMessageSquareDetail } from "react-icons/bi";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import { FaUserFriends } from "react-icons/fa";
+// import { getUserSession } from "@/app/auth/login/page";
+import { getSession } from "next-auth/react";
 
 const Navbar = () => {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userSession = await getSession();
+      setUser(userSession?.user);
+    };
+
+    fetchUser();
+  }, []);
+
   return (
     <nav className="h-24 flex items-center justify-between">
       {/* LEFT */}
@@ -67,7 +80,7 @@ const Navbar = () => {
           </div>
         )}
 
-        {false && (
+        {user && (
           <div className="hidden md:flex text-sky-500 items-center gap-3">
             <FaPeopleGroup className="cursor-pointer text-xl" />
             <BiSolidMessageSquareDetail className="cursor-pointer text-xl" />
@@ -76,14 +89,14 @@ const Navbar = () => {
         )}
         {false && "prfile"}
 
-        {
+        {!user && (
           <div className="hidden md:flex cursor-pointer text-sky-500 items-center gap-2">
             <FaUserCircle className="text-2xl" />
             <Link href="/sign-in" className="font-bold">
               Sign In
             </Link>
           </div>
-        }
+        )}
         <MobileMenu />
       </div>
     </nav>

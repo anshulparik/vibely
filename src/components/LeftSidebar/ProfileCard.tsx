@@ -1,15 +1,16 @@
 import React from "react";
 import Image from "next/image";
 import prisma from "@/lib/client";
-import { auth } from "@clerk/nextjs/server";
+import { getUserSession } from "@/lib/getUserSession";
 
 const ProfileCard = async () => {
-  const { userId } = auth();
+  const userSession = await getUserSession();
+  const userId = userSession?.id;
   if (!userId) return;
 
   const user = await prisma?.user?.findFirst({
     where: {
-      id: userId,
+      id: +userId,
     },
     include: {
       _count: {
