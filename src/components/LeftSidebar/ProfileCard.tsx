@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import prisma from "@/lib/client";
 import { getUserSession } from "@/lib/getUserSession";
+import Link from "next/link";
 
 const ProfileCard = async () => {
   const userSession = await getUserSession();
@@ -78,12 +79,14 @@ const ProfileCard = async () => {
             {`${user?._count?.followers} Followers`}
           </span>
         </div>
-        <button
-          className="text-xs text-white font-semibold bg-sky-500 
-          py-1 px-2 rounded-md"
-        >
-          My Profile
-        </button>
+        <Link href={`profile/${user?.username}`}>
+          <button
+            className="text-xs text-white font-semibold bg-sky-500 
+            py-1 px-2 rounded-md"
+          >
+            My Profile
+          </button>
+        </Link>
       </div>
     </div>
   );

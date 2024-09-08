@@ -2,11 +2,8 @@
 
 import React, { useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
-import { RiChatPollFill } from "react-icons/ri";
-import { MdEvent } from "react-icons/md";
-import { FaVideo } from "react-icons/fa";
-import { FaImage } from "react-icons/fa";
-import prisma from "@/lib/client";
+import { FaUpload } from "react-icons/fa6";
+import { MdFileUpload } from "react-icons/md";
 import Image from "next/image";
 import { CldUploadWidget } from "next-cloudinary";
 import { addPost } from "@/actions";
@@ -33,57 +30,47 @@ const AddPost = () => {
       </div>
       <form
         action={(formData) => addPost(formData, postImage?.secure_url || "")}
-        className="flex gap-2"
+        className=""
       >
-        <input
-          className="flex-1 text-sm p-1
+        <div className="flex gap-2 mb-4">
+          <input
+            className="flex-1 text-sm p-1
             placeholder:text-sm
             focus:text-sm focus:text-gray-600 focus:border-gray-600
             appearance-none border-0 border-b-2 
             outline-none"
-          placeholder="What's on your mind?"
-          name="description"
-          onChange={(e) => setDescription(e?.target?.value)}
-          value={description}
-        />
-        <BsEmojiSmile className="text-xl text-sky-500 cursor-pointer self-end" />
+            placeholder="What's on your mind?"
+            name="description"
+            onChange={(e) => setDescription(e?.target?.value)}
+            value={description}
+          />
+          <BsEmojiSmile className="text-xl text-sky-500 cursor-pointer self-end" />
+        </div>
+        <div className="flex items-center justify-center gap-4">
+          <CldUploadWidget
+            uploadPreset="vibely"
+            onSuccess={(result, { widget }) => {
+              setPostImage(result?.info);
+              widget?.close();
+            }}
+          >
+            {({ open }) => {
+              return (
+                <MdFileUpload
+                  onClick={() => open()}
+                  className="text-sky-500 text-3xl cursor-pointer"
+                />
+              );
+            }}
+          </CldUploadWidget>
+          <button
+            className="text-sm text-white font-semibold bg-sky-500 
+            py-1 px-2 rounded-md"
+          >
+            Add Post
+          </button>
+        </div>
       </form>
-
-      <div className="flex items-center justify-evenly flex-wrap">
-        <CldUploadWidget
-          uploadPreset="vibely"
-          onSuccess={(result, { widget }) => {
-            setPostImage(result?.info);
-            widget?.close();
-          }}
-        >
-          {({ open }) => {
-            return (
-              <div
-                onClick={() => open()}
-                className="flex items-center gap-2 cursor-pointer"
-              >
-                <FaImage className="text-sky-500 text-sm md:text-xl" />
-                <span className="text-gray-400 text-xs font-semibold">
-                  Photo
-                </span>
-              </div>
-            );
-          }}
-        </CldUploadWidget>
-        <div className="flex items-center gap-2 cursor-pointer">
-          <FaVideo className="text-sky-500 text-sm md:text-xl" />
-          <span className="text-gray-400 text-xs font-semibold">Video</span>
-        </div>
-        <div className="flex items-center gap-2 cursor-pointer">
-          <RiChatPollFill className="text-sky-500 text-sm md:text-xl" />
-          <span className="text-gray-400 text-xs font-semibold">Poll</span>
-        </div>
-        <div className="flex items-center gap-2 cursor-pointer">
-          <MdEvent className="text-sky-500 text-sm md:text-xl" />
-          <span className="text-gray-400 text-xs font-semibold">Event</span>
-        </div>
-      </div>
     </div>
   );
 };

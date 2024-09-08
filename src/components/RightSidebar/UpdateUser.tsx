@@ -49,48 +49,90 @@ const UpdateUser = ({ user }: { user: User }) => {
             flex flex-col gap-2 w-full md:w-1/2 xl:w-1/3 relative"
           >
             {/* Title */}
-            <div className="">
-              <h1 className="text-sky-500 text-lg font-semibold">
-                Update Profile
-              </h1>
-              <div className="text-xs text-gray-600 italic font-semibold">
-                Use the navbar profile to change the avatar or username.
-              </div>
-            </div>
-            {/* Cover Pic */}
-            <CldUploadWidget
-              uploadPreset="vibely"
-              onSuccess={(result) => setcoverInfo(result?.info)}
-            >
-              {({ open }) => {
-                return (
-                  <div
-                    className="flex flex-col gap-4 my-4"
-                    onClick={() => open()}
-                  >
-                    <label htmlFor="" className="text-gray-600">
-                      Cover Picture
-                    </label>
-                    <div className="flex items-center gap-4 cursor-pointer">
-                      <div className="h-8 w-12 relative">
-                        <Image
-                          src={user?.coverURL || "/noCover.jpg"}
-                          alt=""
-                          className="absolute object-cover"
-                          fill
-                        />
-                      </div>
-                      <span className="text-xs underline text-sky-500 font-semibold">
-                        Change
-                      </span>
-                    </div>
-                  </div>
-                );
-              }}
-            </CldUploadWidget>
 
-            {/* Input */}
+            <h1 className="text-sky-500 text-lg font-semibold">
+              Update Profile
+            </h1>
+
+            {/* Cover Pic */}
+            <div className="flex items-center justify-between mb-4">
+              <CldUploadWidget
+                uploadPreset="vibely"
+                onSuccess={(result) => setcoverInfo(result?.info)}
+              >
+                {({ open }) => {
+                  return (
+                    <div
+                      className="flex flex-col gap-4 my-4"
+                      onClick={() => open()}
+                    >
+                      <label htmlFor="" className="text-gray-600">
+                        Avatar
+                      </label>
+                      <div className="flex items-center gap-4 cursor-pointer">
+                        <div className="h-8 w-12 relative">
+                          <Image
+                            src={user?.avatarURL || "/noAvatar.jpg"}
+                            alt=""
+                            className="absolute object-cover rounded-md"
+                            fill
+                          />
+                        </div>
+                        <span className="text-xs underline text-sky-500 font-semibold">
+                          Change
+                        </span>
+                      </div>
+                    </div>
+                  );
+                }}
+              </CldUploadWidget>
+              <CldUploadWidget
+                uploadPreset="vibely"
+                onSuccess={(result) => setcoverInfo(result?.info)}
+              >
+                {({ open }) => {
+                  return (
+                    <div
+                      className="flex flex-col gap-4 my-4"
+                      onClick={() => open()}
+                    >
+                      <label htmlFor="" className="text-gray-600">
+                        Cover Picture
+                      </label>
+                      <div className="flex items-center gap-4 cursor-pointer">
+                        <div className="h-8 w-12 relative">
+                          <Image
+                            src={user?.coverURL || "/noCover.jpg"}
+                            alt=""
+                            className="absolute object-cover rounded-md"
+                            fill
+                          />
+                        </div>
+                        <span className="text-xs underline text-sky-500 font-semibold">
+                          Change
+                        </span>
+                      </div>
+                    </div>
+                  );
+                }}
+              </CldUploadWidget>
+            </div>
+
             <div className="flex flex-wrap justify-between gap-2 xl:gap-4">
+              {/* Input */}
+              <div className="flex flex-col gap-4">
+                <label htmlFor="" className="text-gray-600">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  className="outline-none border-b-2 text-gray-400 
+                  focus:text-gray-600 focus:border-gray-600"
+                  placeholder={user?.username || "johndoe"}
+                />
+              </div>
+              {/* Input */}
               <div className="flex flex-col gap-4">
                 <label htmlFor="" className="text-gray-600">
                   First Name

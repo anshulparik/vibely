@@ -31,7 +31,7 @@ const MobileMenu = () => {
         <nav
           className="absolute left-0 top-24 w-full h-[calc(100vh-96px)] 
             bg-white flex flex-col justify-center items-center 
-            font-semibold gap-4 text-xl z-10 text-gray-600"
+            font-semibold gap-4 text-xl z-50 text-gray-600"
         >
           <Link href="/">Home</Link>
           <Link href="/">Friends</Link>

@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import MobileMenu from "./MobileMenu";
 
 import { FaHome } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
@@ -10,8 +9,8 @@ import { BiSolidMessageSquareDetail } from "react-icons/bi";
 import { IoNotifications } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import { FaUserFriends } from "react-icons/fa";
-// import { getUserSession } from "@/app/auth/login/page";
 import { getSession } from "next-auth/react";
+import MobileMenu from "./MobileMenu";
 
 const Navbar = () => {
   const [user, setUser] = useState<any>(null);
