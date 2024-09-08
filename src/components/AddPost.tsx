@@ -46,7 +46,7 @@ const AddPost = () => {
           />
           <BsEmojiSmile className="text-xl text-sky-500 cursor-pointer self-end" />
         </div>
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-between">
           <CldUploadWidget
             uploadPreset="vibely"
             onSuccess={(result, { widget }) => {
@@ -56,16 +56,19 @@ const AddPost = () => {
           >
             {({ open }) => {
               return (
-                <MdFileUpload
-                  onClick={() => open()}
-                  className="text-sky-500 text-3xl cursor-pointer"
-                />
+                <button
+                  className="text-sm text-white font-semibold bg-sky-500 
+                  flex items-center py-1 px-3 rounded-md gap-1"
+                >
+                  <MdFileUpload onClick={() => open()} className="text-lg" />
+                  Upload
+                </button>
               );
             }}
           </CldUploadWidget>
           <button
             className="text-sm text-white font-semibold bg-sky-500 
-            py-1 px-2 rounded-md"
+            py-1 px-3 rounded-md"
           >
             Add Post
           </button>

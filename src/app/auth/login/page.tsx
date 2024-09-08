@@ -9,13 +9,6 @@ const Login = async () => {
   const user = await getUserSession();
   if (user) redirect("/");
 
-  const triggerUserLogin = async (formData: FormData) => {
-    const response = await userLogin(formData);
-    if (response) {
-      redirect("/");
-    }
-  };
-
   return (
     <div className="bg-sky-100 h-screen flex items-center justify-center">
       <div
@@ -28,10 +21,7 @@ const Login = async () => {
         >
           Vibely
         </div>
-        <form
-          action={(formData) => triggerUserLogin(formData)}
-          className="w-full flex flex-col gap-8"
-        >
+        <form action={userLogin} className="w-full flex flex-col gap-8">
           <div className="text-sm flex flex-wrap justify-between gap-1 xl:gap-4">
             <div className="w-full flex flex-col gap-4 ">
               <label htmlFor="" className="text-gray-600">

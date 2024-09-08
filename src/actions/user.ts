@@ -42,10 +42,8 @@ export const registerUser = async (formData: FormData) => {
       },
     });
 
-    return true;
     console.log(user, "Registered successfully!");
   } catch (error) {
-    return false;
     console.log(error, "registerUser err!");
     throw new Error("Somethig went wrong!");
   }
@@ -70,10 +68,8 @@ export const userLogin = async (formData: FormData) => {
     if (response?.error) {
       throw new Error(response.error);
     }
-    return true;
     console.log(response, "Logged in successfully!");
   } catch (error) {
-    return false;
     const someError = error as CredentialsSignin;
     return someError.cause;
   }

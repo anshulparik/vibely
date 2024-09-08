@@ -91,7 +91,7 @@ const Navbar = () => {
         {!user && (
           <div className="hidden md:flex cursor-pointer text-sky-500 items-center gap-2">
             <FaUserCircle className="text-2xl" />
-            <Link href="/sign-in" className="font-bold">
+            <Link href="/auth/login" className="font-bold">
               Sign In
             </Link>
           </div>

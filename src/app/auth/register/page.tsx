@@ -9,13 +9,6 @@ const Register = async () => {
   const user = await getUserSession();
   if (user) redirect("/");
 
-  const triggerRegisterUser = async (formData: FormData) => {
-    const response = await registerUser(formData);
-    if (response) {
-      redirect("/user/login");
-    }
-  };
-
   return (
     <div className="bg-sky-100 h-screen flex items-center justify-center">
       <div
@@ -28,10 +21,7 @@ const Register = async () => {
         >
           Vibely
         </div>
-        <form
-          action={(formData) => triggerRegisterUser(formData)}
-          className="w-full flex flex-col gap-8"
-        >
+        <form action={registerUser} className="w-full flex flex-col gap-8">
           <div className="text-sm flex flex-wrap justify-between gap-1 xl:gap-4">
             <div className="w-full flex flex-col gap-4 ">
               <label htmlFor="" className="text-gray-600">
@@ -42,7 +32,7 @@ const Register = async () => {
                 name="username"
                 className="outline-none border-b-2 text-gray-400 
                   focus:text-gray-600 focus:border-gray-600"
-                placeholder={"username"}
+                placeholder={"Username"}
               />
             </div>
           </div>
