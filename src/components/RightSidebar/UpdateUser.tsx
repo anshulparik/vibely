@@ -12,6 +12,7 @@ import UpdateButton from "./UpdateButton";
 const UpdateUser = ({ user }: { user: User }) => {
   const [modalToggle, setModalToggle] = useState(false);
   const [coverInfo, setcoverInfo] = useState<any>({});
+  const [avatarInfo, setAvatarInfo] = useState<any>({});
   const [state, formAction] = useActionState(updateUserProfile, {
     success: false,
     error: false,
@@ -43,6 +44,7 @@ const UpdateUser = ({ user }: { user: User }) => {
               formAction({
                 formData,
                 coverURL: coverInfo?.secure_url || "",
+                avatarURL: avatarInfo?.secure_url || "",
               })
             }
             className="p-8 bg-white rounded-lg shadow-md
@@ -58,7 +60,9 @@ const UpdateUser = ({ user }: { user: User }) => {
             <div className="flex items-center justify-between mb-4">
               <CldUploadWidget
                 uploadPreset="vibely"
-                onSuccess={(result) => setcoverInfo(result?.info)}
+                onSuccess={(result) => {
+                  console.log(result, "====");
+                  setAvatarInfo(result?.info)}}
               >
                 {({ open }) => {
                   return (

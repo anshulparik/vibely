@@ -1,10 +1,10 @@
 "use client";
 
 import { switchLike } from "@/actions";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiFillLike } from "react-icons/ai";
-import { FaCommentAlt } from "react-icons/fa";
-import { FaShare } from "react-icons/fa";
+import { FaCommentAlt, FaShare } from "react-icons/fa";
+import { useSession } from "next-auth/react";
 
 const PostInteraction = ({
   postId,
@@ -12,24 +12,34 @@ const PostInteraction = ({
   commentsCount,
 }: {
   postId: number;
-  likes: string[];
+  likes: number[];
   commentsCount: number;
 }) => {
-  const { isLoaded, userId } = { isLoaded: true, userId: "2" };
+  const { data: session, status } = useSession();
+  const user = session?.user;
+  const userId = user?.id;
+
   const [likeState, setLikeState] = useState({
     likeCount: likes?.length,
-    isLiked: userId ? likes?.includes(userId) : false,
+    isLiked: false,
   });
+
+  useEffect(() => {
+    if (status === "authenticated" && userId) {
+      setLikeState((prev) => ({
+        ...prev,
+        isLiked: likes?.includes(+userId),
+      }));
+    }
+  }, [status, userId, likes]);
 
   const triggerLikeAction = async () => {
     try {
       await switchLike(postId);
-      setLikeState((prev: { isLiked: boolean; likeCount: number }) => {
-        return {
-          likeCount: prev?.isLiked ? prev?.likeCount - 1 : prev?.likeCount + 1,
-          isLiked: !prev?.isLiked,
-        };
-      });
+      setLikeState((prev) => ({
+        likeCount: prev?.isLiked ? prev?.likeCount - 1 : prev?.likeCount + 1,
+        isLiked: !prev?.isLiked,
+      }));
     } catch (error) {
       console.log(error, "triggerLikeAction err!");
     }
@@ -39,15 +49,13 @@ const PostInteraction = ({
     <div className="mb-4 flex items-center justify-between">
       <div className="flex gap-6 md:gap-8">
         <div className="flex items-center gap-2 md:gap-4">
-          <form action={triggerLikeAction}>
-            <button>
-              <AiFillLike
-                className={`md:text-2xl cursor-pointer  ${
-                  likeState?.isLiked ? "text-sky-500" : "text-gray-600"
-                }`}
-              />
-            </button>
-          </form>
+          <button onClick={triggerLikeAction}>
+            <AiFillLike
+              className={`md:text-2xl cursor-pointer ${
+                likeState?.isLiked ? "text-sky-500" : "text-gray-600"
+              }`}
+            />
+          </button>
           <span className="text-gray-300">|</span>
           <span className="text-gray-400 text-xs 2xl:text-sm">
             {likeState?.likeCount}

@@ -58,7 +58,7 @@ const Post = async ({ post }: { post: FeedPostType }) => {
       <Suspense fallback="Loading...">
         <PostInteraction
           postId={post?.id}
-          likes={post?.likes?.map((item) => item?.userId)}
+          likes={post?.likes?.map((item) => +item?.userId)}
           commentsCount={post?._count?.comments}
         />
       </Suspense>

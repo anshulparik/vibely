@@ -7,8 +7,8 @@ import { z } from "zod";
 
 // User follow/friend request
 export const switchFollowRequest = async (userId: number) => {
-    const user = await getUserSession();
-    const currentUserId = user?.id;
+  const user = await getUserSession();
+  const currentUserId = user?.id;
 
   if (!currentUserId) {
     throw new Error("User is not authenticated!");
@@ -64,8 +64,8 @@ export const switchFollowRequest = async (userId: number) => {
 };
 
 export const switchBlockRequest = async (userId: number) => {
-      const user = await getUserSession();
-      const currentUserId = user?.id;
+  const user = await getUserSession();
+  const currentUserId = user?.id;
 
   if (!currentUserId) {
     throw new Error("User is not authenticated!");
@@ -167,10 +167,10 @@ export const declineFollowRequest = async (userId: string) => {
 // Update Profile
 export const updateUserProfile = async (
   previousState: { success: boolean; error: boolean },
-  payload: { formData: FormData; coverURL: string }
+  payload: { formData: FormData; coverURL: string; avatarURL: string }
 ) => {
   try {
-    const { formData, coverURL } = payload;
+    const { formData, coverURL, avatarURL } = payload;
     const fields = Object.fromEntries(formData);
     let filteredFields: any = {};
     for (const key in fields) {
@@ -180,6 +180,7 @@ export const updateUserProfile = async (
     }
 
     const Profile = z.object({
+      avatarURL: z.string().optional(),
       coverURL: z.string().optional(),
       firstName: z.string().max(30).optional(),
       lastName: z.string().max(30).optional(),
@@ -193,6 +194,10 @@ export const updateUserProfile = async (
     if (coverURL) {
       filteredFields = { ...filteredFields, coverURL };
     }
+    if (avatarURL) {
+      filteredFields = { ...filteredFields, avatarURL };
+    }
+
     const validatedFields = Profile.safeParse(filteredFields);
 
     if (!validatedFields?.success) {
@@ -224,9 +229,9 @@ export const updateUserProfile = async (
 // Switch Likes
 export const switchLike = async (postId: number) => {
   try {
-    const userSession = await getUserSession();  
+    const userSession = await getUserSession();
     const userId = userSession?.id;
-    
+
     if (!userId) {
       throw new Error("User is not authenticated!");
     }
@@ -263,7 +268,7 @@ export const addComment = async (postId: number, description: string) => {
   try {
     const userSession = await getUserSession();
     const userId = userSession?.id;
-    
+
     if (!userId) {
       throw new Error("User is not authenticated!");
     }
@@ -299,7 +304,7 @@ export const addPost = async (formData: FormData, postImage: string) => {
 
     const userSession = await getUserSession();
     const userId = userSession?.id;
-    
+
     if (!userId) {
       throw new Error("User is not authenticated!");
     }
@@ -324,7 +329,7 @@ export const addStory = async (storyImage: string) => {
   try {
     const userSession = await getUserSession();
     const userId = userSession?.id;
-    
+
     if (!userId) {
       throw new Error("User is not authenticated!");
     }
@@ -381,6 +386,43 @@ export const deletePost = async (postId: number) => {
     revalidatePath("/");
   } catch (error) {
     console.log(error, "deletePost err!");
+    throw new Error("Something went wrong!");
+  }
+};
+
+// Switch Likes
+export const switchCommentLike = async (commentId: number) => {
+  try {
+    const userSession = await getUserSession();
+    const userId = userSession?.id;
+
+    if (!userId) {
+      throw new Error("User is not authenticated!");
+    }
+
+    const existingLike = await prisma?.like?.findFirst({
+      where: {
+        commentId,
+        userId: +userId,
+      },
+    });
+
+    if (existingLike) {
+      await prisma?.like?.delete({
+        where: {
+          id: existingLike?.id,
+        },
+      });
+    } else {
+      await prisma?.like?.create({
+        data: {
+          commentId,
+          userId: +userId,
+        },
+      });
+    }
+  } catch (error) {
+    console.log(error, "switchLike err!");
     throw new Error("Something went wrong!");
   }
 };
