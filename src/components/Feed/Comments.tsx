@@ -11,6 +11,11 @@ const Comments = async ({ postId }: { postId: number }) => {
       },
       include: {
         user: true,
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
       },
     });
   } catch (error) {
