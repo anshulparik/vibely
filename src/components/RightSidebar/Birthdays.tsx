@@ -19,7 +19,7 @@ const Birthdays = () => {
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 relative">
             <Image
-              src="/noAvatar.jpg"
+              src={"/profile_img.png" || "/noAvatar.jpg"}
               alt=""
               className="rounded-full ring-1 ring-gray-600 absolute object-cover"
               fill

@@ -34,15 +34,13 @@ export const registerUser = async (formData: FormData) => {
 
     const hashedPassword = await hash(password, 12);
 
-    const user = await prisma?.user?.create({
+    await prisma?.user?.create({
       data: {
         username,
         email,
         password: hashedPassword,
       },
     });
-
-    console.log(user, "Registered successfully!");
   } catch (error) {
     console.log(error, "registerUser err!");
     throw new Error("Somethig went wrong!");
@@ -68,7 +66,6 @@ export const userLogin = async (formData: FormData) => {
     if (response?.error) {
       throw new Error(response.error);
     }
-    console.log(response, "Logged in successfully!");
   } catch (error) {
     const someError = error as CredentialsSignin;
     return someError.cause;

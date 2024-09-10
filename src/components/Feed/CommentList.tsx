@@ -2,10 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { AiFillLike } from "react-icons/ai";
 import { BsEmojiSmile } from "react-icons/bs";
-import { SlOptions } from "react-icons/sl";
-import { FaReply } from "react-icons/fa";
 import { User } from "@prisma/client";
 import { addComment } from "@/actions";
 import Comment from "./Comment";
@@ -29,7 +26,6 @@ const CommentList = ({
     return <div>Loading...</div>;
   }
 
-  console.log(user, "====")
   const triggerCommentAction = async () => {
     try {
       if (!user || !description) return;

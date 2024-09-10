@@ -74,7 +74,7 @@ const Feed = async ({ username }: { username?: string }) => {
       });
     }
   } catch (error) {
-    console.log(error, "Something ");
+    console.log(error, "Something went wrong while fetching posts!");
     throw new Error("Something went wrong while fetching posts!");
   }
 

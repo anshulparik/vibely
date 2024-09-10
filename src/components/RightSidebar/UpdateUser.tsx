@@ -61,7 +61,6 @@ const UpdateUser = ({ user }: { user: User }) => {
               <CldUploadWidget
                 uploadPreset="vibely"
                 onSuccess={(result) => {
-                  console.log(result, "====");
                   setAvatarInfo(result?.info)}}
               >
                 {({ open }) => {

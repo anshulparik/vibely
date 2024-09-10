@@ -37,7 +37,7 @@ const UserMediaCard = async ({ user }: { user?: User }) => {
           See All
         </Link>
       </div>
-      <div className="flex items-center justify-center gap-6 flex-wrap">
+      <div className="flex items-center gap-6 flex-wrap">
         {postsWithMedia && postsWithMedia?.length ? (
           postsWithMedia?.map((post) => {
             return (

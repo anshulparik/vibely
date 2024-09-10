@@ -122,9 +122,10 @@ const UserInfoCard = async ({ user }: { user: User }) => {
               <FaLink className="text-sm text-sky-500" />
               <Link
                 href={user?.website}
+                target="blank"
                 className="text-sky-500 text-sm font-medium"
               >
-                {user?.website}
+                Website
               </Link>
             </div>
           )}
