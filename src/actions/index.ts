@@ -291,6 +291,30 @@ export const addComment = async (postId: number, description: string) => {
   }
 };
 
+// Delete Comment
+export const deleteComment = async (commentId: number) => {
+  try {
+    const userSession = await getUserSession();
+    const userId = userSession?.id;
+
+    if (!userId) {
+      throw new Error("User is not authenticated!");
+    }
+
+    await prisma?.comment?.delete({
+      where: {
+        id: commentId,
+        userId: +userId,
+      },
+    });
+
+    revalidatePath("/");
+  } catch (error) {
+    console.log(error, "deleteComment err!");
+    throw new Error("Something went wrong!");
+  }
+};
+
 // Add Post
 export const addPost = async (formData: FormData, postImage: string) => {
   try {

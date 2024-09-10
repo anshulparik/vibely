@@ -2,7 +2,7 @@
 
 import { addStory } from "@/actions";
 import { Story, User } from "@prisma/client";
-import { getSession, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -21,6 +21,8 @@ const StoryList = ({ stories }: { stories: StoryWithUser[] }) => {
     return <div>Loading...</div>;
   }
 
+  if (!user) return null;
+
   const triggerStoryAction = async () => {
     try {
       if (!storyImage?.secure_url) return;
@@ -32,7 +34,7 @@ const StoryList = ({ stories }: { stories: StoryWithUser[] }) => {
     }
   };
 
-  if (!user) return null;
+
 
   return (
     <>
@@ -52,7 +54,7 @@ const StoryList = ({ stories }: { stories: StoryWithUser[] }) => {
                 relative w-14 h-14 md:w-20 md:h-20"
               >
                 <Image
-                  src={storyImage?.secure_url || "/noAvatar.jpg"}
+                  src={storyImage?.secure_url || user?.avatarURL || "/noAvatar.jpg"}
                   alt=""
                   fill
                   className="absolute object-cover 
