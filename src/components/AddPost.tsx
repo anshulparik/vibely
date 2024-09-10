@@ -2,15 +2,26 @@
 
 import React, { useState } from "react";
 import { BsEmojiSmile } from "react-icons/bs";
-import { FaUpload } from "react-icons/fa6";
 import { MdFileUpload } from "react-icons/md";
 import Image from "next/image";
 import { CldUploadWidget } from "next-cloudinary";
 import { addPost } from "@/actions";
+import { useSession } from "next-auth/react";
 
 const AddPost = () => {
+  const { data: session, status } = useSession();
+  const user = session?.user;
+
   const [description, setDescription] = useState("");
   const [postImage, setPostImage] = useState<any>();
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <div
@@ -20,7 +31,7 @@ const AddPost = () => {
       <div className="flex items-center gap-4 mb-3">
         <div className="relative w-8 h-8">
           <Image
-            src={"/noAvatar.jpg"}
+            src={user?.avatarURL || "/noAvatar.jpg"}
             alt=""
             fill
             className="ring-1 rounded-full ring-gray-600 absolute object-cover"
@@ -59,8 +70,10 @@ const AddPost = () => {
                 <button
                   className="text-sm text-white font-semibold bg-sky-500 
                   flex items-center py-1 px-3 rounded-md gap-1"
+                  type="button"
+                  onClick={() => open()}
                 >
-                  <MdFileUpload onClick={() => open()} className="text-lg" />
+                  <MdFileUpload className="text-lg" />
                   Upload
                 </button>
               );
@@ -69,6 +82,7 @@ const AddPost = () => {
           <button
             className="text-sm text-white font-semibold bg-sky-500 
             py-1 px-3 rounded-md"
+            type="submit"
           >
             Add Post
           </button>
