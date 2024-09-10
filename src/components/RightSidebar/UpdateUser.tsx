@@ -75,7 +75,7 @@ const UpdateUser = ({ user }: { user: User }) => {
                       <div className="flex items-center gap-4 cursor-pointer">
                         <div className="h-8 w-12 relative">
                           <Image
-                            src={user?.avatarURL || "/noAvatar.jpg"}
+                            src={avatarInfo?.secure_url || user?.avatarURL || "/noAvatar.jpg"}
                             alt=""
                             className="absolute object-cover rounded-md"
                             fill
@@ -105,7 +105,7 @@ const UpdateUser = ({ user }: { user: User }) => {
                       <div className="flex items-center gap-4 cursor-pointer">
                         <div className="h-8 w-12 relative">
                           <Image
-                            src={user?.coverURL || "/noCover.jpg"}
+                            src={coverInfo?.secure_url || user?.coverURL || "/noCover.jpg"}
                             alt=""
                             className="absolute object-cover rounded-md"
                             fill
