@@ -9,6 +9,7 @@ import { FaReply } from "react-icons/fa";
 import { User } from "@prisma/client";
 import { addComment } from "@/actions";
 import Comment from "./Comment";
+import { useSession } from "next-auth/react";
 
 type CommentWithUser = Comment & { user: User };
 
@@ -19,16 +20,21 @@ const CommentList = ({
   comments: any;
   postId: number;
 }) => {
-  // const { user } = useUser();
-  const user: any = {}
+  const { data: session, status } = useSession();
+  const user = session?.user;
   const [commentState, setCommentState] = useState(comments);
   const [description, setDescription] = useState("");
 
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  console.log(user, "====")
   const triggerCommentAction = async () => {
     try {
       if (!user || !description) return;
       const createdComment = await addComment(postId, description);
-      setCommentState((prev) => [...prev, createdComment]);
+      setCommentState((prev: any) => [...prev, createdComment]);
     } catch (error) {
       console.log(error, "Failed to add comment!");
     }
@@ -40,7 +46,7 @@ const CommentList = ({
         <div className="flex items-center gap-4 mb-6">
           <div className="relative w-8 h-8">
             <Image
-              src={user?.imageUrl || "/noAvatar.jpg"}
+              src={user?.avatarURL || "/noAvatar.jpg"}
               alt=""
               fill
               className="ring-1 rounded-full ring-gray-600 absolute object-cover"
@@ -64,9 +70,7 @@ const CommentList = ({
       )}
       {/* comments */}
       {commentState?.map((comment: any) => {
-        return (
-          <Comment comment={comment} />
-        );
+        return <Comment key={comment?.key} comment={comment} />;
       })}
     </>
   );

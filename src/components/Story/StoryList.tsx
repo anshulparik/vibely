@@ -2,7 +2,7 @@
 
 import { addStory } from "@/actions";
 import { Story, User } from "@prisma/client";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -12,18 +12,14 @@ type StoryWithUser = Story & {
 };
 
 const StoryList = ({ stories }: { stories: StoryWithUser[] }) => {
-  const [user, setUser] = useState<any>(null);
+  const { data: session, status } = useSession();
+  const user = session?.user;
   const [storyImage, setStoryImage] = useState<any>();
   const [storiesState, setStoriesState] = useState(stories);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const userSession = await getSession();
-      setUser(userSession?.user);
-    };
-
-    fetchUser();
-  }, []);
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
   const triggerStoryAction = async () => {
     try {
