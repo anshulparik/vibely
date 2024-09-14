@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { BsEmojiSmile } from "react-icons/bs";
 import { User } from "@prisma/client";
 import { addComment } from "@/actions";
 import Comment from "./Comment";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type CommentWithUser = Comment & { user: User };
 
@@ -19,6 +20,7 @@ const CommentList = ({
 }) => {
   const { data: session, status } = useSession();
   const user = session?.user;
+  const router = useRouter();
   const [commentState, setCommentState] = useState(comments);
   const [description, setDescription] = useState("");
 
@@ -31,6 +33,7 @@ const CommentList = ({
       if (!user || !description) return;
       const createdComment = await addComment(postId, description);
       setCommentState((prev: any) => [...prev, createdComment]);
+      router.refresh();
     } catch (error) {
       console.log(error, "Failed to add comment!");
     }
@@ -66,7 +69,12 @@ const CommentList = ({
       )}
       {/* comments */}
       {commentState?.map((comment: any) => {
-        return <Comment key={comment?.key} comment={comment} />;
+        return (
+          <Comment
+            key={comment?.key}
+            comment={comment}
+          />
+        );
       })}
     </>
   );

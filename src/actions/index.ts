@@ -308,7 +308,6 @@ export const deleteComment = async (commentId: number) => {
       },
     });
 
-    revalidatePath("/");
   } catch (error) {
     console.log(error, "deleteComment err!");
     throw new Error("Something went wrong!");

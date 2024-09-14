@@ -1,14 +1,25 @@
 "use client";
 
-import { deletePost } from "@/actions";
+import { deleteComment, deletePost } from "@/actions";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { SlOptions } from "react-icons/sl";
 
-const PostInfo = ({ postId }: { postId: number }) => {
+const CommentInfo = ({
+  commentId,
+}: {
+  commentId: number;
+}) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  const deletePostById = deletePost.bind(null, postId);
+  const deleteCommentById = deleteComment.bind(null, commentId);
+
+  const handleDelete = async () => {
+    await deleteCommentById();
+    router?.refresh();
+  };
 
   return (
     <div className="relative">
@@ -18,7 +29,7 @@ const PostInfo = ({ postId }: { postId: number }) => {
       />
       {open && (
         <div className=" w-32 absolute top-4 right-0 bg-white p-4 rounded-lg flex flex-col gap-2 text-xs shadow-lg z-30">
-          <form className="" action={deletePostById}>
+          <form action={handleDelete}>
             <div className="flex items-center gap-2 cursor-pointer">
               <MdDelete className="text-red-500 text-lg" />
               <button className="text-red-500 font-semibold">Delete</button>
@@ -30,4 +41,4 @@ const PostInfo = ({ postId }: { postId: number }) => {
   );
 };
 
-export default PostInfo;
+export default CommentInfo;

@@ -6,9 +6,13 @@ import Image from "next/image";
 import React, { useEffect, useState, useMemo } from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaReply } from "react-icons/fa";
-import { SlOptions } from "react-icons/sl";
+import CommentInfo from "./CommentInfo";
 
-const Comment = ({ comment }: { comment: any }) => {
+const Comment = ({
+  comment,
+}: {
+  comment: any;
+}) => {
   const { data: session, status } = useSession();
   const userId = session?.user?.id;
 
@@ -60,7 +64,11 @@ const Comment = ({ comment }: { comment: any }) => {
               : comment?.user?.username}
           </span>
         </div>
-        <SlOptions className="md:text-xl text-gray-600 cursor-pointer" />
+        {userId && +userId === comment?.user?.id && (
+          <CommentInfo
+            commentId={comment?.id}
+          />
+        )}
       </div>
       <div className="flex flex-col gap-2">
         <p className="text-xs md:text-sm text-gray-600 border-b-2 px-2 py-4">
