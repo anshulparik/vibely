@@ -13,7 +13,7 @@ type FollowRequestWithUser = FollowRequest & {
 const FriendRequestsList = ({
   friendRequests,
 }: {
-  friendRequests: FollowRequestWithUser[];
+  friendRequests: any;
 }) => {
   const [friendRequestsState, setFriendRequestsState] =
     useState(friendRequests);
@@ -21,8 +21,8 @@ const FriendRequestsList = ({
   const acceptFriendRequest = async (requestId: number, userId: string) => {
     try {
       await acceptFollowRequest(userId);
-      setFriendRequestsState((prev) =>
-        prev?.filter((item) => item?.id !== requestId)
+      setFriendRequestsState((prev: any) =>
+        prev?.filter((item: any) => item?.id !== requestId)
       );
     } catch (error) {
       console.log(error, "Error accepting friend request!");
@@ -32,8 +32,8 @@ const FriendRequestsList = ({
   const declineFriendRequest = async (requestId: number, userId: string) => {
     try {
       await declineFollowRequest(userId);
-      setFriendRequestsState((prev) =>
-        prev?.filter((item) => item?.id !== requestId)
+      setFriendRequestsState((prev: any) =>
+        prev?.filter((item: any) => item?.id !== requestId)
       );
     } catch (error) {
       console.log(error, "Error accepting friend request!");
@@ -43,7 +43,7 @@ const FriendRequestsList = ({
   return (
     <div>
       {friendRequestsState && friendRequestsState?.length ? (
-        friendRequestsState?.map((request) => {
+        friendRequestsState?.map((request: any) => {
           return (
             <div
               key={request?.id}

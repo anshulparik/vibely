@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 
 // regiter user logic
 export const registerUser = async (formData: FormData) => {
+  let isRegistered = false;
   try {
     const username = formData.get("username") as string;
     const email = formData.get("email") as string;
@@ -41,13 +42,20 @@ export const registerUser = async (formData: FormData) => {
         password: hashedPassword,
       },
     });
+
+    isRegistered = true;
   } catch (error) {
     console.log(error, "registerUser err!");
     throw new Error("Somethig went wrong!");
   }
+
+  if (isRegistered) {
+    redirect("/auth/login");
+  }
 };
 
 export const userLogin = async (formData: FormData) => {
+  let isLoggedIn = false;
   try {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
@@ -66,9 +74,15 @@ export const userLogin = async (formData: FormData) => {
     if (response?.error) {
       throw new Error(response.error);
     }
+
+    isLoggedIn = true;
   } catch (error) {
     const someError = error as CredentialsSignin;
     return someError.cause;
+  }
+
+  if (isLoggedIn) {
+    redirect("/");
   }
 };
 

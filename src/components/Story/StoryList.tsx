@@ -13,7 +13,7 @@ type StoryWithUser = Story & {
 
 const StoryList = ({ stories }: { stories: StoryWithUser[] }) => {
   const { data: session, status } = useSession();
-  const user = session?.user;
+  const user = session?.user as any;
   const [storyImage, setStoryImage] = useState<any>();
   const [storiesState, setStoriesState] = useState(stories);
 

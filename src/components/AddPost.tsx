@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react";
 
 const AddPost = () => {
   const { data: session, status } = useSession();
-  const user = session?.user;
+  const user = session?.user as any;
 
   const [description, setDescription] = useState("");
   const [postImage, setPostImage] = useState<any>();

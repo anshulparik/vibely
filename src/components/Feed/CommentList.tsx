@@ -19,7 +19,7 @@ const CommentList = ({
   postId: number;
 }) => {
   const { data: session, status } = useSession();
-  const user = session?.user;
+  const user = session?.user as any;
   const router = useRouter();
   const [commentState, setCommentState] = useState(comments);
   const [description, setDescription] = useState("");

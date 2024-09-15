@@ -28,17 +28,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
         }
 
-        const user = await prisma?.user?.findFirst({
+        const user = (await prisma?.user?.findFirst({
           where: {
             email: email,
           },
-        });
+        })) as any;
 
         if (!user) {
           throw new CredentialsSignin("Invalid email or password!");
         }
 
-        const isMatched = await compare(password, user?.password);
+        const isMatched = compare(password, user?.password);
         if (!isMatched) {
           throw new CredentialsSignin("Invalid email or password!");
         }
@@ -48,7 +48,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           username: user?.username,
           email: user?.email,
           role: user?.role,
-          avatarURL: user?.avatarURL
+          avatarURL: user?.avatarURL,
         };
 
         return userData;
@@ -60,16 +60,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     // updating user session
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (token?.sub && token?.role && token?.username) {
         session.user.id = token?.sub;
         session.user.role = token?.role;
         session.user.username = token?.username;
-        session.user.avatarURL = token?.avatarURL || '';
+        session.user.avatarURL = token?.avatarURL || "";
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
         token.role = user?.role;
         token.username = user?.username;

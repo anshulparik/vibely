@@ -12,7 +12,7 @@ type FeedPostType = PostType & {
   likes: [{ userId: string }];
 } & { _count: { comments: number } };
 
-const Post = async ({ post }: { post: FeedPostType }) => {
+const Post = async ({ post }: { post: any }) => {
   const user = await getUserSession();
   const userId = user?.id;
 
@@ -58,7 +58,7 @@ const Post = async ({ post }: { post: FeedPostType }) => {
       <Suspense fallback="Loading...">
         <PostInteraction
           postId={post?.id}
-          likes={post?.likes?.map((item) => +item?.userId)}
+          likes={post?.likes?.map((item: any) => +item?.userId)}
           commentsCount={post?._count?.comments}
         />
       </Suspense>

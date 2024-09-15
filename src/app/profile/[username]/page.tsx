@@ -1,7 +1,7 @@
 import Feed from "@/components/Feed/Feed";
 import LeftSidebar from "@/components/LeftSidebar/LeftSidebar";
 import RightSidebar from "@/components/RightSidebar/RightSidebar";
-import React, { use } from "react";
+import React from "react";
 import Image from "next/image";
 import prisma from "@/lib/client";
 import { notFound } from "next/navigation";
