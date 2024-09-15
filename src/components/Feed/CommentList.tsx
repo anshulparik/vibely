@@ -73,6 +73,7 @@ const CommentList = ({
           <Comment
             key={comment?.key}
             comment={comment}
+            setCommentState={setCommentState}
           />
         );
       })}

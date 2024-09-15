@@ -10,8 +10,10 @@ import CommentInfo from "./CommentInfo";
 
 const Comment = ({
   comment,
+  setCommentState,
 }: {
   comment: any;
+  setCommentState: any;
 }) => {
   const { data: session, status } = useSession();
   const userId = session?.user?.id;
@@ -67,6 +69,7 @@ const Comment = ({
         {userId && +userId === comment?.user?.id && (
           <CommentInfo
             commentId={comment?.id}
+            setCommentState={setCommentState}
           />
         )}
       </div>

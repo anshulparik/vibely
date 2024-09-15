@@ -8,8 +8,10 @@ import { SlOptions } from "react-icons/sl";
 
 const CommentInfo = ({
   commentId,
+  setCommentState,
 }: {
   commentId: number;
+  setCommentState: any;
 }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -18,6 +20,9 @@ const CommentInfo = ({
 
   const handleDelete = async () => {
     await deleteCommentById();
+    setCommentState((prev: any) =>
+      prev?.filter((item: any) => item.id !== commentId)
+    );
     router?.refresh();
   };
 
